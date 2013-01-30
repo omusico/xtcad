@@ -49,15 +49,12 @@ C:\Users\Administrator\Documents\Visual Studio 2008\Projects\XTCAD\CAD\bin\Debug
 C:\Users\Administrator\Documents\Visual Studio 2008\Projects\XTCAD\CAD\bin\Debug\Telerik.WinControls.UI.xml
 C:\Users\Administrator\Documents\Visual Studio 2008\Projects\XTCAD\CAD\bin\Debug\Telerik.WinControls.xml
 C:\Users\Administrator\Documents\Visual Studio 2008\Projects\XTCAD\CAD\bin\Debug\Model.pdb
-C:\Users\Administrator\Documents\Visual Studio 2008\Projects\XTCAD\CAD\bin\Debug\DotNetARX.xml
 C:\Users\Administrator\Documents\Visual Studio 2008\Projects\XTCAD\CAD\obj\Debug\CAD.dll
 C:\Users\Administrator\Documents\Visual Studio 2008\Projects\XTCAD\CAD\obj\Debug\CAD.LoginForm.resources
 C:\Users\Administrator\Documents\Visual Studio 2008\Projects\XTCAD\CAD\obj\Debug\CAD.CADOptionControl.resources
-C:\Users\Administrator\Documents\Visual Studio 2008\Projects\XTCAD\CAD\bin\Debug\Interop.DDVueLib.dll
 C:\Users\Administrator\Documents\Visual Studio 2008\Projects\XTCAD\CAD\bin\Debug\Interop.DWGTHUMBNAILLib.dll
 C:\Users\Administrator\Documents\Visual Studio 2008\Projects\XTCAD\CAD\bin\Debug\AxInterop.DWGTHUMBNAILLib.dll
-C:\Users\Administrator\Documents\Visual Studio 2008\Projects\XTCAD\CAD\obj\Debug\Interop.DDVueLib.dll
 C:\Users\Administrator\Documents\Visual Studio 2008\Projects\XTCAD\CAD\obj\Debug\Interop.DWGTHUMBNAILLib.dll
 C:\Users\Administrator\Documents\Visual Studio 2008\Projects\XTCAD\CAD\obj\Debug\AxInterop.DWGTHUMBNAILLib.dll
-C:\Users\Administrator\Documents\Visual Studio 2008\Projects\XTCAD\CAD\bin\Debug\AxInterop.DDVueLib.dll
-C:\Users\Administrator\Documents\Visual Studio 2008\Projects\XTCAD\CAD\obj\Debug\AxInterop.DDVueLib.dll
+C:\Users\Administrator\Documents\Visual Studio 2008\Projects\XTCAD\CAD\bin\Debug\DotNetARXMgd.dll
+C:\Users\Administrator\Documents\Visual Studio 2008\Projects\XTCAD\CAD\obj\Debug\CAD.BatchPlot.resources

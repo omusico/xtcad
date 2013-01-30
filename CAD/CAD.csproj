@@ -85,6 +85,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Forms\BatchPlot.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\BatchPlot.designer.cs">
+      <DependentUpon>BatchPlot.cs</DependentUpon>
+    </Compile>
     <Compile Include="Utils\BlockContextMenu.cs" />
     <Compile Include="Forms\CADOptionControl.cs">
       <SubType>UserControl</SubType>
@@ -95,10 +101,12 @@
     <Compile Include="Utils\Commands.cs" />
     <Compile Include="Utils\CommonTools.cs" />
     <Compile Include="Utils\DoubleClickClass.cs" />
+    <Compile Include="Utils\FrameInfo.cs" />
     <Compile Include="Utils\FtpClient.cs" />
     <Compile Include="Utils\G.cs" />
     <Compile Include="Initialization.cs" />
     <Compile Include="Forms\LoginForm.cs">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\LoginForm.designer.cs">
       <DependentUpon>LoginForm.cs</DependentUpon>
@@ -110,6 +118,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Forms\SaveFileForm.cs">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\SaveFileForm.Designer.cs">
       <DependentUpon>SaveFileForm.cs</DependentUpon>
@@ -121,6 +130,7 @@
       <DependentUpon>ToolsForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Utils\IniFile.cs" />
+    <Compile Include="Utils\PlotUtil.cs" />
     <Compile Include="Utils\TitleIcon.cs" />
     <Compile Include="Utils\TransHelper.cs" />
     <Compile Include="Utils\ViewDwg.cs" />
@@ -170,6 +180,10 @@
     </COMReference>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Forms\BatchPlot.resx">
+      <DependentUpon>BatchPlot.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\CADOptionControl.resx">
       <DependentUpon>CADOptionControl.cs</DependentUpon>
     </EmbeddedResource>

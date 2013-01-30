@@ -41,6 +41,7 @@ namespace CAD
             pm.AddMenuItem(pm.Count + 1, "保存图纸", "_SaveFile ");
             pm.AddMenuItem(pm.Count + 1, "校审批注", "_CheckDwg ");
             pm.AddMenuItem(pm.Count + 1, "图纸目录", "_DwgList ");
+            pm.AddMenuItem(pm.Count + 1, "批量打印", "_BatchPlot ");
             pm.AddMenuItem(pm.Count + 1, "注销", "_Logout ");
         }
 
@@ -66,6 +67,14 @@ namespace CAD
             s1 = myModule.FullyQualifiedName;
             Tools.WriteMessageWithReturn("获取当前运行的程序集的完整路径（包含文件名）" + s1);
         }
+
+        [CommandMethod("BatchPlot")]
+        public static void BatchPlot()
+        {
+            BatchPlot batchPlotForm = new BatchPlot();
+            batchPlotForm.Show();
+        }
+
 
 
         [CommandMethod("Login")]
