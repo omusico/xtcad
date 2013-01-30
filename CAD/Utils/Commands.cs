@@ -91,6 +91,18 @@ namespace CAD
             }
         }
 
+        [CommandMethod("AttachFileInfo")]
+        public static void AttachFileInfo()
+        {
+            string fileId = Tools.Editor.GetString("文件id").StringResult;
+            string[] args = new string[1];
+            args[0] = fileId;
+            object result = WebServiceHelper.InvokeWebService("UserWebservice", "getFileInfo", args);
+            FileInfo fileInfo = JsonHelper.JsonDeserialize<FileInfo>(result.ToString());
+            Tools.WriteMessageWithReturn(result.ToString());
+            Tools.Document.UserData.Add("文件信息", fileInfo);
+        }
+
         [CommandMethod("Logout")]
         public static void Logout()
         {
