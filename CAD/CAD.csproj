@@ -49,9 +49,13 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>D:\Program Files\AutoCAD 2007\acmgdinternal.dll</HintPath>
     </Reference>
-    <Reference Include="DotNetARX, Version=5.0.0.1, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="DotNetARX, Version=6.0.3802.32278, Culture=neutral, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>E:\公司电脑备份\Visual Studio 2008\Projects\CIADM\Bins\DotNetARX.dll</HintPath>
+      <HintPath>bin\DotNetARX.dll</HintPath>
+    </Reference>
+    <Reference Include="DotNetARXMgd, Version=6.0.3802.31840, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\DotNetARXMgd.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
@@ -95,7 +99,6 @@
     <Compile Include="Utils\G.cs" />
     <Compile Include="Initialization.cs" />
     <Compile Include="Forms\LoginForm.cs">
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\LoginForm.designer.cs">
       <DependentUpon>LoginForm.cs</DependentUpon>
@@ -107,7 +110,6 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Forms\SaveFileForm.cs">
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\SaveFileForm.Designer.cs">
       <DependentUpon>SaveFileForm.cs</DependentUpon>
