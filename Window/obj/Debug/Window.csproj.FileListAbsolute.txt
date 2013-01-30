@@ -1,0 +1,10 @@
+C:\Users\Administrator\Documents\Visual Studio 2008\Projects\XTCAD\Window\bin\Debug\Window.exe
+C:\Users\Administrator\Documents\Visual Studio 2008\Projects\XTCAD\Window\bin\Debug\Window.pdb
+C:\Users\Administrator\Documents\Visual Studio 2008\Projects\XTCAD\Window\bin\Debug\Model.dll
+C:\Users\Administrator\Documents\Visual Studio 2008\Projects\XTCAD\Window\bin\Debug\Model.pdb
+C:\Users\Administrator\Documents\Visual Studio 2008\Projects\XTCAD\Window\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\Administrator\Documents\Visual Studio 2008\Projects\XTCAD\Window\obj\Debug\Window.Form1.resources
+C:\Users\Administrator\Documents\Visual Studio 2008\Projects\XTCAD\Window\obj\Debug\Window.Properties.Resources.resources
+C:\Users\Administrator\Documents\Visual Studio 2008\Projects\XTCAD\Window\obj\Debug\Window.csproj.GenerateResource.Cache
+C:\Users\Administrator\Documents\Visual Studio 2008\Projects\XTCAD\Window\obj\Debug\Window.exe
+C:\Users\Administrator\Documents\Visual Studio 2008\Projects\XTCAD\Window\obj\Debug\Window.pdb

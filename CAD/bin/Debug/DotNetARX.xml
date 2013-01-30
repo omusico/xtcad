@@ -1,0 +1,1408 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doc>
+    <assembly>
+        <name>DotNetARX</name>
+    </assembly>
+    <members>
+        <member name="T:DNA.Tools">
+            <summary>
+            Tools包含一些非常有用的功能。
+            </summary>
+        </member>
+        <member name="F:DNA.Tools.PauseToken">
+            <summary>
+              如果Tools.RunCommnd()在运行过程中碰到PauseToken这个符号，那么正在运行的AutoCAD命令将暂停来接受用户的输入。
+            </summary>
+        </member>
+        <member name="M:DNA.Tools.WriteMessage(System.String)">
+            <summary>
+            在AutoCAD的文本窗口显示信息。
+            </summary>
+            <param name="message">要显示的内容</param>
+        </member>
+        <member name="M:DNA.Tools.WriteMessageWithReturn(System.String)">
+            <summary>
+              在AutoCAD的文本窗口显示信息并添加一个新行。
+            </summary>
+            <param name="message">要显示的内容</param>
+        </member>
+        <member name="M:DNA.Tools.RunCommand(System.Boolean,System.Object[])">
+            <summary>
+            在ARX中执行一条或多条AutoCAD命令，类似于C++中的acedCmd。
+            </summary>
+            <param name="echoCommand">提示是否要在命令行上显示输入的命令字符串</param>
+            <param name="args">要执行的AutoCAD命令列表</param>
+            <example> 下面的例子输入命令来让AutoCAD画一个圆。
+            <code escaped="true">
+            	void test() 
+            	{
+            		//在当前图形中画一个圆并缩放来显示整个圆。   
+                    Tools.RunCommand(false, "_Circle", "2,2,0","4");
+                    Tools.RunCommand(false,"_Zoom","a");
+            	}
+            </code>
+            </example>
+        </member>
+        <member name="M:DNA.Tools.Queueexpr(System.String)">
+            <summary>
+            在不能使用acedCommand的时候，在每个图形编辑进程的开始执行一些AutoCAD命令。
+            </summary>
+            <param name="expression">命令字符串</param>
+        </member>
+        <member name="M:DNA.Tools.ZoomExtents">
+            <summary>
+            缩放当前视口到图形边界。
+            </summary>
+            <seealso cref="M:DNA.Tools.ZoomAll"/>
+        </member>
+        <member name="M:DNA.Tools.ZoomCenter(Autodesk.AutoCAD.Geometry.Point3d,System.Double)">
+            <summary>
+            缩放当前视口的中心到一个指定的点并放大。
+            </summary>
+            <param name="center">缩放中心的3D WCS坐标</param>
+            <param name="magnify">缩放级别</param> 
+            <seealso cref="M:DNA.Tools.ZoomAll"/>
+        </member>
+        <member name="M:DNA.Tools.ZoomWindow(Autodesk.AutoCAD.Geometry.Point3d,Autodesk.AutoCAD.Geometry.Point3d)">
+            <summary>
+            缩放当前视口到由两点确定的窗口。
+            </summary>
+            <param name="lowerLeft">缩放窗口的左下角坐标</param>
+            <param name="upperRight">缩放窗口的右上角坐标</param>
+            <seealso cref="M:DNA.Tools.ZoomAll"/>
+        </member>
+        <member name="M:DNA.Tools.ZoomAll">
+             <summary>
+             缩放当前视口来显示整个图形。 
+             </summary>
+             <example>
+             <code escaped="true">
+            public void ZoomSamp()
+            {
+                // This example creates several objects in model space and
+                // then performs a variety of zooms on the drawing.
+                
+                // Create a Ray object in model space
+                Ray rayObj = new Ray();
+                Point3d basePoint = new Point3d(3, 3, 0);
+                Point3d secondPoint = new Point3d(1, 3, 0);
+                rayObj.AddToModelSpace();
+            
+                //Create a polyline object in model space
+                Polyline plineObj = new Polyline(3);
+                plineObj.AddVertexAt(0, new Point2d(3, 7), 0, 0, 0);
+                plineObj.AddVertexAt(1, new Point2d(9, 2), 0, 0, 0);
+                plineObj.AddVertexAt(2, new Point2d(3, 5), 0, 0, 0);
+                plineObj.Closed = true;
+                plineObj.AddToModelSpace();
+            
+                //Create a line object in model space
+                Line lineObj = new Line(new Point3d(0, 0, 0), new Point3d(2, 2, 0));
+                lineObj.AddToModelSpace();
+            
+                //Create a circle object in model space
+                Circle circObj = new Circle();
+                circObj.Center = new Point3d(20, 30, 0);
+                circObj.Radius = 3;
+                circObj.AddToModelSpace();
+            
+                //Create an ellipse object in model space
+                Ellipse ellObj = new Ellipse(new Point3d(5,5,0),Vector3d.ZAxis,new Vector3d(10,20,0),0.3,0,Math.PI*2);
+                ellObj.AddToModelSpace();
+            
+                //ZoomAll
+                Application.ShowAlertDialog("Perform a ZoomAll");
+                Tools.ZoomAll();
+            
+                //ZoomWindow
+                Application.ShowAlertDialog("Perform a ZoomWindow");
+                Tools.ZoomWindow(new Point3d(1.3, 7.8, 0), new Point3d(13.7, -2.6, 0));
+            
+                //ZoomExtents
+                Application.ShowAlertDialog("Perform a ZoomExtents");
+                Tools.ZoomExtents();
+            
+                //ZoomCenter
+                Application.ShowAlertDialog("Perform a ZoomCenter");
+                Tools.ZoomCenter(new Point3d(3,3,0),10);
+            } 
+            </code>
+             </example>
+        </member>
+        <member name="M:DNA.Tools.ZoomPrevious">
+            <summary>
+            缩放当前视口到它的前一个状态。
+            </summary>
+        </member>
+        <member name="M:DNA.Tools.UpdateAttributesInBlock(Autodesk.AutoCAD.DatabaseServices.ObjectId,System.Collections.Hashtable)">
+            <summary>
+            更新一个块参照中的属性。
+            </summary>
+            <param name="blockRefId">块参照的object id</param>
+            <param name="attNameValues">一组表示属性名/值的键/值对。</param>
+            <example> 下面的例子把所选择的块参照的"RADIUS"属性改变为 "2"。
+            <code escaped="true">
+            	void test() 
+            	{
+            		ObjectId id=Tools.Editor.GetEntity("Please select a block").ObjectId;
+                    Hashtable h=new Hashtable();
+                    h.Add("RADIUS", "2");
+                    Tools.UpdateAttributesInBlock(id, h);
+            	}
+            </code>
+            </example>
+        </member>
+        <member name="M:DNA.Tools.InsertBlockReference(System.String,System.String,Autodesk.AutoCAD.Geometry.Point3d,Autodesk.AutoCAD.Geometry.Scale3d,System.Double,System.Collections.Hashtable)">
+             <summary>
+             在当前图形中插入一个带有属性的有名块。
+             </summary>
+             <param name="layer">块参照所要插入的图层名</param>
+             <param name="blockName">AutoCAD图形文件的名字或所要插入的块名</param>
+             <param name="position">块参照的插入点</param>
+             <param name="scale">块参照的缩放值</param>
+             <param name="rotateAngle">块参照的旋转角度</param>
+             <param name="attNameValues">一组表示属性名/值的键/值对</param>
+             <returns>插入块的Object Id</returns>
+             <example> 下面的例子插入一个名为"CircleBlock"的块，并设置"RADIUS"属性为"2".
+             <code escaped="true">
+            void Example_InsertBlock()
+            {
+                Hashtable h=new Hashtable();
+                h.Add("RADIUS", "2");
+                Tools.InsertBlockReference("0", "CircleBlock", Point3d.Origin, new Scale3d(1, 1, 1), 0,h);
+            }
+             </code>
+             </example>
+        </member>
+        <member name="M:DNA.Tools.InsertBlockReference(System.String,System.String,Autodesk.AutoCAD.Geometry.Point3d,Autodesk.AutoCAD.Geometry.Scale3d,System.Double)">
+            <summary>
+            在当前图形中插入一个有名块。
+            </summary>
+            <param name="layer">块参照所要插入的图层名</param>
+            <param name="blockName">AutoCAD图形文件的名字或所要插入的块名</param>
+            <param name="position">块参照的插入点</param>
+            <param name="scale">块参照的缩放值</param>
+            <param name="rotateAngle">块参照的旋转角度</param>
+            <returns>插入块的Object Id</returns>
+        </member>
+        <member name="M:DNA.Tools.GetAttributeValueInBlock(Autodesk.AutoCAD.DatabaseServices.ObjectId,System.String)">
+             <summary>
+             获取块参照的属性值。
+             </summary>
+             <param name="blockRefId">块参照的Object Id</param>
+             <param name="attName">属性名</param>
+             <returns>属性值</returns>
+             <example> 下面的例子获取所选择的块参照的"RADIUS"属性值。
+             <code escaped="true">
+            public void Example_GetAttribute()
+            {
+                ObjectId id=Tools.Editor.GetEntity("Please select a block reference").ObjectId;
+                string radius=Tools.GetAttributeValueInBlock(id, "RADIUS");
+                Tools.Editor.WriteMessage(radius);
+            }
+             </code>
+             </example>
+        </member>
+        <member name="M:DNA.Tools.CollectBlockEnts(Autodesk.AutoCAD.DatabaseServices.BlockTableRecord)">
+            <summary>
+            遍历一个块表记录并返回它所包含的实体。
+            </summary>
+            <param name="blkRec">所要记功的块表记录</param>
+            <returns>块表记录中包含的对象</returns>
+        </member>
+        <member name="M:DNA.Tools.DefineNewBlockRec(System.String)">
+            <summary>
+            定义一个新的有名块并把它加入到块表。如果块定义已经存在，那么它的内容将被清空，块会被重新定义。
+            </summary>
+            <param name="blkName">块名</param>
+        </member>
+        <member name="M:DNA.Tools.DefineNewAnonymousBlockRec">
+            <summary>
+            定义一个匿名块并加入到块表中。
+            </summary>
+            <returns>一个打开的块表记录用来加入实体</returns>
+        </member>
+        <member name="M:DNA.Tools.TransformBy(Autodesk.AutoCAD.EditorInput.SelectionSet,Autodesk.AutoCAD.Geometry.Matrix3d)">
+             <summary>
+             对选择集进行矩阵变换。 
+             </summary>
+             <param name="ss">选择集对象</param>
+             <param name="transMat">变换矩阵</param>
+             <example> 下面的例子使用TransformBy来移动所选择的所有实体。
+             <code escaped="true">
+            void Example_TransformSelectionSet()
+            {
+                Point3d fromPoint=new Point3d(0,0,0);
+                Point3d toPoint=new Point3d(20,0,0);
+                Vector3d moveVector = toPoint.GetVectorTo(fromPoint);
+                Matrix3d moveMatrix = Matrix3d.Displacement(moveVector);
+                SelectionSet ss=Tools.Editor.SelectAll().Value;
+                ss.TransformBy(moveMatrix);
+            }
+             </code>
+             </example>
+        </member>
+        <member name="M:DNA.Tools.Rotate(Autodesk.AutoCAD.DatabaseServices.ObjectId,Autodesk.AutoCAD.Geometry.Point3d,System.Double)">
+            <summary>
+            基于一个点来旋转一个实体。
+            </summary>
+            <param name="id">所要旋转的实体对象的Id</param>
+            <param name="basePoint">旋转基点</param>
+            <param name="rotationAngle">旋转角度</param>
+            <example> 下面的例子旋转所选择的实体45度。
+            <code escaped="true">
+            	void test() 
+            	{
+            		Editor ed=Tools.Editor;
+            		PromptEntityResult res =ed.GetEntity("please select an entity:\n");
+            		Point3d pt1=ed.GetPoint("Select the base point of rotation:\n").Value;
+            		res.ObjectId.Rotate(pt1,45);
+            	}
+            </code>
+            </example>
+        </member>
+        <member name="M:DNA.Tools.Rotate(Autodesk.AutoCAD.DatabaseServices.Entity,Autodesk.AutoCAD.Geometry.Point3d,System.Double)">
+            <summary>
+            基于一个点来旋转一个实体。
+            </summary>
+            <param name="ent">所要旋转的实体对象</param>
+            <param name="basePoint">旋转基点</param>
+            <param name="rotationAngle">旋转角度</param>
+        </member>
+        <member name="M:DNA.Tools.Move(Autodesk.AutoCAD.DatabaseServices.ObjectId,Autodesk.AutoCAD.Geometry.Point3d,Autodesk.AutoCAD.Geometry.Point3d)">
+            <summary>
+            移动实体。
+            </summary>
+            <param name="id">所要移动的实体对象的object ID</param>
+            <param name="fromPoint">移动向量的第一点</param>
+            <param name="toPoint">移动向量的第二点</param>
+        </member>
+        <member name="M:DNA.Tools.Move(Autodesk.AutoCAD.DatabaseServices.Entity,Autodesk.AutoCAD.Geometry.Point3d,Autodesk.AutoCAD.Geometry.Point3d)">
+            <summary>
+            移动实体。
+            </summary>
+            <param name="ent">所要移动的实体对象</param>
+            <param name="fromPoint">移动向量的第一点</param>
+            <param name="toPoint">移动向量的第二点</param>
+        </member>
+        <member name="M:DNA.Tools.Scale(Autodesk.AutoCAD.DatabaseServices.ObjectId,Autodesk.AutoCAD.Geometry.Point3d,System.Double)">
+            <summary>
+            缩放实体。
+            </summary>
+            <param name="id">所要缩放的实体的object ID</param>
+            <param name="basePoint">缩放基点</param>
+            <param name="scaleFactor">缩放比例。必须大于0,大于1表示放大实体，0~1之间表示缩小实体。</param>
+            <example>下面的例子放大实体为2倍。
+            <code>
+            	void test() 
+            	{
+            		Editor ed=Tools.Editor;
+            		PromptEntityResult res =ed.GetEntity("please select an entity:\n");
+            		Point3d pt1=ed.GetPoint("Select the base point of scaling:\n").Value;
+            		res.ObjectId.Scale(pt1,2);
+            	}
+            </code>
+            </example>
+        </member>
+        <member name="M:DNA.Tools.Scale(Autodesk.AutoCAD.DatabaseServices.Entity,Autodesk.AutoCAD.Geometry.Point3d,System.Double)">
+            <summary>
+            缩放实体。
+            </summary>
+            <param name="ent">所要缩放的实体</param>
+            <param name="basePoint">缩放基点</param>
+            <param name="scaleFactor">缩放比例。必须大于0,大于1表示放大实体，0~1之间表示缩小实体。</param>
+        </member>
+        <member name="M:DNA.Tools.Mirror(Autodesk.AutoCAD.DatabaseServices.ObjectId,Autodesk.AutoCAD.Geometry.Point3d,Autodesk.AutoCAD.Geometry.Point3d,System.Boolean)">
+            <summary>
+            镜像拷贝实体。
+            </summary>
+            <param name="idSource">源对象的object ID</param>
+            <param name="mirrorPoint1">镜像轴的第一点</param>
+            <param name="mirrorPoint2">镜像轴的第二点</param>
+            <param name="eraseSourceObject">是否删除源对象</param>
+            <returns>镜像拷贝的实体的object ID</returns>
+            <example> 下面的例子镜像所选择的实体。
+            <code escaped="true">
+            	void test() 
+            	{
+            		Editor ed=Tools.Editor;
+            		PromptEntityResult res =ed.GetEntity("please select an entity:\n");
+            		Point3d pt1=ed.GetPoint("Select the first point of the mirror axis:\n").Value;
+            		Point3d pt2=ed.GetPoint("Select the second point of the mirror axis:\n").Value;
+            		res.ObjectId.Mirror(pt1,pt2,false);
+            	}
+            </code>
+            </example>
+        </member>
+        <member name="M:DNA.Tools.Mirror(Autodesk.AutoCAD.DatabaseServices.Entity,Autodesk.AutoCAD.Geometry.Point3d,Autodesk.AutoCAD.Geometry.Point3d,System.Boolean)">
+            <summary>
+            镜像拷贝实体。
+            </summary>
+            <param name="ent">源对象</param>
+            <param name="mirrorPoint1">镜像轴的第一点</param>
+            <param name="mirrorPoint2">镜像轴的第二点</param>
+            <param name="eraseSourceObject">是否删除源对象</param>
+            <returns>镜像拷贝的实体的object ID</returns>
+        </member>
+        <member name="M:DNA.Tools.Copy(Autodesk.AutoCAD.DatabaseServices.ObjectId)">
+            <summary>
+            复制实体对象。
+            </summary>
+            <param name="idCopy">源对象的object ID</param>
+            <returns>复制的实体对象的object ID</returns>
+            <example>下面的例子使用Copy()来获取一个实体的拷贝，然后使用Move()来移动这个拷贝。
+            <code escaped="true">
+            	void test() 
+            	{
+            		PromptEntityResult res = Tools.Editor.GetEntity("please select an entity to copy:\n");
+            		ObjectId id= res.ObjectId.Copy();
+            		id.Move(res.PickedPoint,res.PickedPoint.Add(new Vector3d(20,20,0)));
+            	}
+            </code>
+            </example>
+        </member>
+        <member name="M:DNA.Tools.Copy(Autodesk.AutoCAD.DatabaseServices.Entity)">
+            <summary>
+            复制实体对象。
+            </summary>
+            <param name="ent">源对象</param>
+            <returns>复制的实体对象的object ID</returns>
+        </member>
+        <member name="M:DNA.Tools.Erase(Autodesk.AutoCAD.DatabaseServices.ObjectId)">
+            <summary>
+            删除指定的实体。
+            </summary>
+            <param name="id">被删除的实体object ID</param>
+        </member>
+        <member name="M:DNA.Tools.Offset(Autodesk.AutoCAD.DatabaseServices.ObjectId,System.Double)">
+            <summary>
+            偏移实体。
+            </summary>
+            <param name="id">源对象的object ID</param>
+            <param name="distance">偏移的距离。可以为正或负，但不能为0。</param>
+            <returns>偏移创造的实体集合的ObjectId</returns>
+            <example> 下面的例子展示如何偏移实体。
+            <code escaped="true">
+            	void test() 
+            	{
+            		Editor ed=Tools.Editor;
+            		PromptEntityResult res =ed.GetEntity("please select an entity:\n");
+            		res.ObjectId.Offset(20);
+            	}
+            </code>
+            </example>
+        </member>
+        <member name="M:DNA.Tools.ArrayRectangular(Autodesk.AutoCAD.DatabaseServices.Entity,System.Int32,System.Int32,System.Double,System.Double)">
+            <summary>
+            矩形阵列实体。
+            </summary>
+            <param name="ent">源对象</param>
+            <param name="numRows">矩形阵列的行数，必须为正整数，如果为1，则NumberOfCols参数必须大于1。</param>
+            <param name="numCols">矩形阵列的列数，必须为正整数，如果为1，则NumberOfRows参数必须大于1。</param>
+            <param name="disRows">行间距。如果为正值，则基于源对象向上添加行；如果为负值，则向下添加行 。</param>
+            <param name="disCols">列间距。如果为正值，则基于源对象向右添加列；如果为负值，则向左添加列。</param>
+        </member>
+        <member name="M:DNA.Tools.ArrayRectangular(Autodesk.AutoCAD.DatabaseServices.ObjectId,System.Int32,System.Int32,System.Double,System.Double)">
+            <summary>
+            矩形阵列实体。
+            </summary>
+            <param name="id">源对象的objectid</param>
+            <param name="numRows">矩形阵列的行数，必须为正整数，如果为1，则NumberOfCols参数必须大于1。</param>
+            <param name="numCols">矩形阵列的列数，必须为正整数，如果为1，则NumberOfRows参数必须大于1。</param>
+            <param name="disRows">行间距。如果为正值，则基于源对象向上添加行；如果为负值，则向下添加行 。</param>
+            <param name="disCols">列间距。如果为正值，则基于源对象向右添加列；如果为负值，则向左添加列。</param>
+        </member>
+        <member name="M:DNA.Tools.ArrayPolar(Autodesk.AutoCAD.DatabaseServices.Entity,Autodesk.AutoCAD.Geometry.Point3d,System.Int32,System.Double)">
+            <summary>
+            环形阵列实体。 
+            </summary>
+            <param name="ent">源对象</param>
+            <param name="cenPt">环形阵列的中心点</param>
+            <param name="numObj">环形阵列的对象数目，必须为一个大于1的正整数。</param>
+            <param name="Angle">所要填充的角度值，以弧度表示。正值表示逆时针旋转，负值表示顺时针旋转。如果为0，则会出现错误。</param>
+        </member>
+        <member name="M:DNA.Tools.ArrayPolar(Autodesk.AutoCAD.DatabaseServices.ObjectId,Autodesk.AutoCAD.Geometry.Point3d,System.Int32,System.Double)">
+            <summary>
+            环形阵列实体。
+            </summary>
+            <param name="id">源对象的objectid</param>
+            <param name="cenPt">环形阵列的中心点</param>
+            <param name="numObj">环形阵列的对象数目，必须为一个大于1的正整数。</param>
+            <param name="Angle">所要填充的角度值，以弧度表示。正值表示逆时针旋转，负值表示顺时针旋转。如果为0，则会出现错误。</param>
+        </member>
+        <member name="M:DNA.Tools.ReDraw(Autodesk.AutoCAD.EditorInput.Editor,Autodesk.AutoCAD.DatabaseServices.ObjectId,DNA.Tools.RedrawMode)">
+            <summary>
+            依据参数来重新绘制整个图形视口或一个实体。
+            </summary>
+            <param name="ed">命令行编辑器对象</param>
+            <param name="entityId">所要绘制的实体的ObjectId或设置为null表示整个图形视口</param>
+            <param name="mode">重新绘制的模式</param>
+            <remarks>ReDraw的调用必须配对。RedrawMode.UndrawEntity模式的调用必须位于RedrawMode.RedrawEntity模式调用之后。RedrawMode.HighlightEntity的调任必须位于RedrawMode.UnHighlightEntity调用之后。不匹配的调用如RedrawMode.HighlightEntity模式位于RedrawMode.RedrawEntity之后，是不允许的。 </remarks>
+        </member>
+        <member name="M:DNA.Tools.ReDraw(Autodesk.AutoCAD.EditorInput.Editor)">
+            <summary>
+            重新绘制整个图形视口
+            </summary>
+        </member>
+        <member name="M:DNA.Tools.AddToModelSpace(Autodesk.AutoCAD.DatabaseServices.Entity,Autodesk.AutoCAD.DatabaseServices.Database)">
+            <summary>
+            添加一个实体到数据库的模型空间。
+            </summary>
+            <param name="ent">所要加入的实体对象</param>
+            <param name="database">实体对象加入的数据库</param>
+            <returns>加入实体的ObjectId</returns>
+        </member>
+        <member name="M:DNA.Tools.AddToModelSpace(Autodesk.AutoCAD.DatabaseServices.Entity)">
+            <summary>
+            添加一个实体到当前图形的模型空间。
+            </summary>
+            <param name="ent">所要加入的实体对象</param>
+            <returns>加入实体的ObjectId</returns>
+            <example>下面的例子展示如何添加一条直线到当前图形的模型空间。 
+            <code escaped="true">
+            	void AddLine()
+            	{
+            		Point3d pt1=new Point3d(0,0,0);
+            		Point3d pt2=new Point3d(50,50,0);
+            		Line line=new Line(pt1,pt2);
+            		line.AddToModelSpace();
+            	}
+            </code>
+            </example>
+        </member>
+        <member name="M:DNA.Tools.AddToPaperSpace(Autodesk.AutoCAD.DatabaseServices.Entity,Autodesk.AutoCAD.DatabaseServices.Database)">
+            <summary>
+            添加一个实体到数据库的图纸空间。
+            </summary>
+            <param name="ent">所要加入的实体对象</param>
+            <param name="database">实体对象加入的数据库</param>
+            <returns>加入实体的ObjectId</returns>
+        </member>
+        <member name="M:DNA.Tools.AddToPaperSpace(Autodesk.AutoCAD.DatabaseServices.Entity)">
+            <summary>
+            添加一个实体到当前图形的图纸空间.
+            </summary>
+            <param name="ent">所要加入的实体对象</param>
+            <returns>加入实体的ObjectId</returns>
+        </member>
+        <member name="M:DNA.Tools.AddToCurrentSpace(Autodesk.AutoCAD.DatabaseServices.Entity,Autodesk.AutoCAD.DatabaseServices.Database)">
+            <summary>
+            添加一个实体到数据库的活动空间。
+            </summary>
+            <param name="ent">所要加入的实体对象</param>
+            <param name="database">实体对象加入的数据库</param>
+            <returns>加入实体的ObjectId</returns>
+        </member>
+        <member name="M:DNA.Tools.AddToCurrentSpace(Autodesk.AutoCAD.DatabaseServices.Entity)">
+            <summary>
+            添加一个实体到当前图形的活动空间.
+            </summary>
+            <param name="ent">所要加入的实体对象</param>
+            <returns>加入实体的ObjectId</returns>
+        </member>
+        <member name="M:DNA.Tools.AddEntities(Autodesk.AutoCAD.DatabaseServices.Entity[])">
+            <summary>
+            添加多个实体到当前图形。
+            </summary>
+            <param name="ents">所要加入的多个实体</param>
+            <returns>加入的实体的ObjectId</returns>
+            <example>下面的例子加入一条直线和一个圆到当前图形。
+            <code escaped="true">
+            	void AddLineCircle()
+            	{
+            		Point3d pt1=new Point3d(0,0,0);
+            		Point3d pt2=new Point3d(50,50,0);
+            		Lines line=new Lines(pt1,pt2);
+            		Point3d center=new Point3d(50,0,0);
+            		Circle circle=new Circle(center,Vector3d.ZAxis,50);
+            		Tools.AddEntities(new Entity[]{line,circle});
+            	}
+            </code>
+            </example>
+        </member>
+        <member name="M:DNA.Tools.GetEntity(Autodesk.AutoCAD.DatabaseServices.ObjectId)">
+            <summary>
+            根据ObjectId获取实体对象。
+            </summary>
+            <param name="id">实体对象的object Id</param>
+            <returns>AutoCAD实体对象</returns>
+        </member>
+        <member name="M:DNA.Tools.GetDBObject(Autodesk.AutoCAD.DatabaseServices.ObjectId)">
+            <summary>
+            根据object ID获取AutoCAD DBObject对象.
+            </summary>
+            <param name="id">DBObject对象的ObjectId</param>
+            <returns>AutoCAD DBObject对象</returns>
+        </member>
+        <member name="M:DNA.Tools.GetDBObjectCollection(Autodesk.AutoCAD.DatabaseServices.ObjectId[])">
+            <summary>
+            根据object ID获取AutoCAD DBObject对象集合。
+            </summary>
+            <param name="ids">DBObjects对象集合的ObjectId</param>
+            <returns>DBObjects对象集合</returns>
+        </member>
+        <member name="M:DNA.Tools.GetDBObjectCollection(Autodesk.AutoCAD.DatabaseServices.ObjectIdCollection)">
+            <summary>
+            根据object ID获取AutoCAD DBObject对象集合。
+            </summary>
+            <param name="ids">DBObjects对象集合的ObjectId</param>
+            <returns>DBObjects对象集合</returns>
+        </member>
+        <member name="M:DNA.Tools.GetAllObjectsInModelSpace(Autodesk.AutoCAD.DatabaseServices.Database)">
+            <summary>
+            获取数据库模型空间中所有对象。
+            </summary>
+            <param name="db">数据库对象</param>
+            <returns>数据库模型空间中所有对象</returns>
+        </member>
+        <member name="M:DNA.Tools.GetAllObjectsInPaperSpace(Autodesk.AutoCAD.DatabaseServices.Database)">
+            <summary>
+            获取数据库图纸空间中所有对象。
+            </summary>
+            <param name="db">数据库对象</param>
+            <returns>数据库图纸空间中所有对象</returns>
+        </member>
+        <member name="M:DNA.Tools.SetXData(Autodesk.AutoCAD.DatabaseServices.ObjectId,System.String,Autodesk.AutoCAD.DatabaseServices.ResultBuffer)">
+             <summary>
+             为实体附加扩展数据。
+             </summary>
+             <param name="entId">实体的Object Id</param>
+             <param name="applicationName">扩展数据的应用程序名</param>
+             <param name="xData">要附加的扩展数据</param>
+             <example>下面的例子展示如何设置和获取实体的扩展数据。
+             <code escaped="true">
+            public void Exampe_XData()
+            {
+                ObjectId id = Tools.Editor.GetEntity("Please select an entity").ObjectId;
+                string appName = "Test_Application";
+                //Initialize all the xdata values. Note that first data in the list should be application name and first datatype code should be 1001(DxfCode.ExtendedDataRegAppName).
+                ResultBuffer xDataIn = new ResultBuffer(
+                    new TypedValue((int)DxfCode.ExtendedDataRegAppName, appName),
+                    new TypedValue((int)DxfCode.ExtendedDataAsciiString, "This is a test for xdata"),  
+                    new TypedValue((int)DxfCode.ExtendedDataLayerName, "0"),   //layer
+                    new TypedValue((int)DxfCode.ExtendedDataReal, 1.23479137438413E+40),  //real
+                    new TypedValue((int)DxfCode.ExtendedDataDist, 1237324938),   //distance
+                    new TypedValue((int)DxfCode.ExtendedDataInteger16, 32767),   //16 bit integer
+                    new TypedValue((int)DxfCode.ExtendedDataInteger32, 32767));  //32 bit integer
+                //Attach the xdata to the object    
+                id.SetXData(appName, xDataIn);
+                //Return the xdata for the object
+                ResultBuffer xDataOut = id.GetXData(appName);
+                if (xDataOut == null)
+                {
+                    return;
+                }
+                foreach (TypedValue xdata in xDataOut)
+                {
+                    Tools.WriteMessage(string.Format("\nTypeCode={0},Value={1}", xdata.TypeCode, xdata.Value));
+                }
+            }
+             </code>
+             </example>
+        </member>
+        <member name="M:DNA.Tools.GetXData(Autodesk.AutoCAD.DatabaseServices.ObjectId,System.String)">
+            <summary>
+            获取实体的扩展数据。
+            </summary>
+            <param name="entId">实体的Object Id</param>
+            <param name="applicationName">扩展数据的应用程序名</param>
+            <returns>应用程序所创建的扩展数据</returns>
+            <seealso cref="M:DNA.Tools.SetXData(Autodesk.AutoCAD.DatabaseServices.ObjectId,System.String,Autodesk.AutoCAD.DatabaseServices.ResultBuffer)"/>
+        </member>
+        <member name="M:DNA.Tools.SetXRecord(Autodesk.AutoCAD.DatabaseServices.ObjectId,System.String,Autodesk.AutoCAD.DatabaseServices.ResultBuffer)">
+             <summary>
+             为实体附加扩展记录。
+             </summary>
+             <param name="entId">实体的Object Id</param>
+             <param name="keyForXrecord">扩展记录的键</param>
+             <param name="xRecord">附加到实体的扩展记录数据</param>
+             <example>下面的例子创建一个新的扩展记录，并添加数据，然后把扩展记录读出来。 
+             <code escaped="true">
+            public void Exampe_Xrecord()
+            {
+                ObjectId id = Tools.Editor.GetEntity("Please select an entity").ObjectId;
+                ResultBuffer xRecordIn = new ResultBuffer(
+                    new TypedValue((int)DxfCode.Text, "This is a test for xrecord"),
+                    new TypedValue((int)DxfCode.XCoordinate, new Point3d(0, 0, 0)),
+                    new TypedValue((int)DxfCode.Real, 3.14159),
+                    new TypedValue((int)DxfCode.Angle, 3.14159));
+                id.SetXRecord("MyXrecord", xRecordIn);
+            
+                ResultBuffer xRecordOut = id.GetXRecord("MyXrecord");
+                if (xRecordOut == null)
+                {
+                    return;
+                }
+                foreach (TypedValue xrecord in xRecordOut)
+                {
+                    Tools.WriteMessage(string.Format("\nTypeCode={0},Value={1}", xrecord.TypeCode, xrecord.Value));
+                }
+            }
+             </code>
+             </example>
+        </member>
+        <member name="M:DNA.Tools.GetXRecord(Autodesk.AutoCAD.DatabaseServices.ObjectId,System.String)">
+            <summary>
+            获取实体的扩展记录。
+            </summary>
+            <param name="entId">实体的Object Id</param>
+            <param name="keyForXrecord">扩展记录的键</param>
+            <returns>附加到实体的扩展记录数据</returns>
+            <seealso cref="M:DNA.Tools.SetXRecord(Autodesk.AutoCAD.DatabaseServices.ObjectId,System.String,Autodesk.AutoCAD.DatabaseServices.ResultBuffer)"/>
+        </member>
+        <member name="M:DNA.Tools.RadiansToDegrees(System.Double)">
+            <summary>
+            把一个角度值从弧度转换为角度。
+            </summary>
+            <param name="rads">以弧度表示的角度值</param>
+            <returns>以角度表示的角度值</returns>
+        </member>
+        <member name="M:DNA.Tools.DegreesToRadians(System.Double)">
+            <summary>
+            把一个角度值从角度转换为弧度。
+            </summary>
+            <param name="degrees">以角度表示的角度值</param>
+            <returns>以弧度表示的角度值</returns>
+        </member>
+        <member name="M:DNA.Tools.GetPoint(Autodesk.AutoCAD.Geometry.Point3d,System.Double,System.Double)">
+            <summary>
+            根据一点及两点之间的距离计算另一点的坐标。
+            </summary>
+            <param name="pointStart">给定点</param>
+            <param name="x">两点之间X方向距离</param>
+            <param name="y">两点之间Y方向距离</param>
+            <returns>计算出的点</returns>
+        </member>
+        <member name="M:DNA.Tools.GetPolarPoint(Autodesk.AutoCAD.Geometry.Point3d,System.Double,System.Double)">
+            <summary>
+            根据两点之间的角度和距离计算点的坐标。
+            </summary>
+            <param name="ptBase">起始点的坐标</param>
+            <param name="angle">两点之间的角度，以弧度表示</param>
+            <param name="distance">两点之间的距离</param>
+            <returns>根据角度和距离计算出的另一点</returns>
+            <example>下面的例子根据与一已知点之间的角度和距离计算出另一点的坐标。
+            <code escaped="true">
+            	public void Example_PolarPoint()
+            	{
+            		Point3d polarPoint;
+                    Point3d basePoint=new Point3d(0,2,0);
+            		double angle=Math.PI/4; //45 degrees
+            		distance=5;
+                    polarPoint=basePoint.GetPolarPoint(angle,distance);
+            
+                    //Create a line from the base point to the polar point
+                    Line line = new Line(basePoint,polarPoint);
+                    line.AddToModelSpace();
+            	}
+            </code>	
+            </example>
+        </member>
+        <member name="M:DNA.Tools.GetMidPoint(Autodesk.AutoCAD.Geometry.Point3d,Autodesk.AutoCAD.Geometry.Point3d)">
+            <summary>
+            获取两点之间的中点。
+            </summary>
+            <param name="pt1">输入点坐标</param>
+            <param name="pt2">输入点坐标</param>
+            <returns>两点之间的中点</returns>
+        </member>
+        <member name="M:DNA.Tools.AngleFromXAxis(Autodesk.AutoCAD.Geometry.Point3d,Autodesk.AutoCAD.Geometry.Point3d)">
+             <summary>
+             获取一条直线与X轴之间的角度。
+             </summary>
+             <param name="point1">直线的起点</param>
+             <param name="point2">直线的终点</param>
+             <returns>以弧度表示的直线与X轴之间的角度</returns>
+             <example>
+             <code escaped="true">
+             public void Example_AngleFromXAxis()
+             {
+                 Point3d pt1 = new Point3d(2, 5, 0);
+                 Point3d pt2 = new Point3d(5, 2, 0);
+                 //Return the angle
+                 double retAngle = Tools.AngleFromXAxis(pt1, pt2);
+            
+                 //Create the line for a visual reference
+                 Line line = new Line(pt1, pt2);
+                 line.AddToModelSpace();
+            
+                 //Display the angle found
+                 MessageBox.Show("The angle in radians between the X axis and the line is " + retAngle.ToString(), "AngleFromXAxis Example");
+            }
+             </code>
+             </example>
+        </member>
+        <member name="M:DNA.Tools.GetCenOf3Pt(Autodesk.AutoCAD.Geometry.Point3d,Autodesk.AutoCAD.Geometry.Point3d,Autodesk.AutoCAD.Geometry.Point3d,System.Double@)">
+            <summary>
+            获取通过三点的圆的圆心
+            </summary>
+            <param name="startPoint">圆上的一点</param>
+            <param name="pointOnArc">圆上的一点</param>
+            <param name="endPoint">圆上的一点</param>
+            <param name="radius">圆的半径（用于输出）</param>
+            <returns>圆的圆心</returns>
+        </member>
+        <member name="M:DNA.Tools.GetIntersectPoint(Autodesk.AutoCAD.DatabaseServices.Line,Autodesk.AutoCAD.DatabaseServices.Line)">
+            <summary>
+            获取两条直线的交点
+            </summary>
+            <param name="firstLine">第一条直线</param>
+            <param name="secondLine">第二条直线</param>
+            <returns>两条直线的交点</returns>
+        </member>
+        <member name="M:DNA.Tools.GetIntersectPoint(Autodesk.AutoCAD.DatabaseServices.ObjectId,Autodesk.AutoCAD.DatabaseServices.ObjectId)">
+            <summary>
+            获取两条直线的交点
+            </summary>
+            <param name="firstLineId">第一条直线的ObjectId</param>
+            <param name="secondLineId">第二条直线的ObjectId</param>
+            <returns>两条直线的交点</returns>
+        </member>
+        <member name="M:DNA.Tools.GetIntersectPoint(Autodesk.AutoCAD.Geometry.Point3d,Autodesk.AutoCAD.Geometry.Point3d,Autodesk.AutoCAD.Geometry.Point3d,Autodesk.AutoCAD.Geometry.Point3d)">
+            <summary>
+            获取两条直线的交点
+            </summary>
+            <param name="from1">第一条直线的起点</param>
+            <param name="to1">第一条直线的终点</param>
+            <param name="from2">第二条直线的起点</param>
+            <param name="to2">第二条直线的终点</param>
+            <returns>两条直线的交点</returns>
+        </member>
+        <member name="M:DNA.Tools.MakePointEnt(Autodesk.AutoCAD.Geometry.Point3d,System.Int32)">
+            <summary>
+            使用Point3d来创建一个DBPoint对象。
+            </summary>
+            <param name="pt">Point3d对象</param>
+            <param name="colorIndex">DBPoint对象的颜色索引值</param>
+            <returns>DBPoint对象的ObjectId</returns>
+        </member>
+        <member name="M:DNA.Tools.SaveAsR14(Autodesk.AutoCAD.DatabaseServices.Database,System.String)">
+            <summary>
+            保存图形为R14格式。
+            </summary>
+            <param name="db">图形数据库</param>
+            <param name="fileName">文件名</param>
+        </member>
+        <member name="M:DNA.Tools.IsPaperSpace(Autodesk.AutoCAD.DatabaseServices.Database)">
+            <summary>
+            给定数据库的当前空间是否为图纸空间？
+            </summary>
+            <param name="db">指定数据库</param>
+            <returns></returns>		
+        </member>
+        <member name="M:DNA.Tools.TranslateCoordinates(Autodesk.AutoCAD.Geometry.Point3d,DNA.Tools.CoordinateSystem,DNA.Tools.CoordinateSystem)">
+            <summary>
+            将点由一个坐标系统转换为另一个坐标系统。
+            </summary>
+            <param name="originalPoint">要转换的点</param>
+            <param name="from">点的初始坐标系统</param>
+            <param name="to">点的转换坐标系统</param>
+            <returns>经过转换的点</returns>
+        </member>
+        <member name="M:DNA.Tools.TranslateCoordinates(Autodesk.AutoCAD.Geometry.Vector3d,DNA.Tools.CoordinateSystem,DNA.Tools.CoordinateSystem)">
+            <summary>
+            将位移向量由一个坐标系统转换为另一个坐标系统。
+            </summary>
+            <param name="originalVector">要转换的位移向量</param>
+            <param name="from">位移向量的初始坐标系统</param>
+            <param name="to">位移向量的转换坐标系统</param>
+            <returns>经过转换的向量</returns>
+        </member>
+        <member name="M:DNA.Tools.GetUcsMatrix(Autodesk.AutoCAD.DatabaseServices.Database)">
+            <summary>
+            获取给定数据库的当前UCS矩阵。
+            </summary>
+            <param name="db">给定的数据库</param>
+            <returns>给定数据库的当前UCS矩阵</returns>
+        </member>
+        <member name="M:DNA.Tools.GetUcsZAxis(Autodesk.AutoCAD.DatabaseServices.Database)">
+            <summary>
+            获取给定数据库的UCS的Z轴
+            </summary>
+            <param name="db">给定的数据库</param>
+            <returns>UCS的Z轴</returns>        
+        </member>
+        <member name="M:DNA.Tools.GetUcsPlane(Autodesk.AutoCAD.DatabaseServices.Database)">
+            <summary>
+            获取给定数据库的UCS平面
+            </summary>
+            <param name="db">给定的数据库</param>
+            <returns>UCS平面</returns>        
+        </member>
+        <member name="M:DNA.Tools.GetUcsToWcsOriginMatrix(Autodesk.AutoCAD.Geometry.Point3d,Autodesk.AutoCAD.DatabaseServices.Database)">
+            <summary>
+            获取UCS和WCS原点之间的转换矩阵。
+            </summary>
+            <param name="wcsBasePt">原点坐标</param>
+            <param name="db">给定的数据库</param>
+            <returns>UCS和WCS原点之间的转换矩阵</returns>        
+        </member>
+        <member name="M:DNA.Tools.GetEcsXAxis(Autodesk.AutoCAD.Geometry.Vector3d)">
+            <summary>
+            获取一个实体的ECS的X轴。
+            </summary>
+            <param name="ecsZAxis">实体的法向量</param>
+            <returns>ECS的X轴</returns>        
+        </member>
+        <member name="M:DNA.Tools.GetEcsToWcsMatrix(Autodesk.AutoCAD.Geometry.Point3d,Autodesk.AutoCAD.Geometry.Vector3d)">
+            <summary>
+              获取ECS和WCS原点之间的转换矩阵。
+            </summary>
+            <param name="origin">原点</param>
+            <param name="zAxis">实体的法向量</param>
+            <returns>ECS矩阵</returns>        
+        </member>
+        <member name="M:DNA.Tools.UcsToWcs(Autodesk.AutoCAD.Geometry.Point3d)">
+            <summary>
+            将点从UCS转换成WCS。
+            </summary>
+            <param name="pt">要转换的点</param>
+            <returns>转换的点</returns>        
+        </member>
+        <member name="M:DNA.Tools.UcsToWcs(Autodesk.AutoCAD.Geometry.Vector3d)">
+            <summary>
+            将向量从UCS转换成WCS。
+            </summary>
+            <param name="vec">要转换的向量</param>
+            <returns>转换的向量</returns>        
+        </member>
+        <member name="M:DNA.Tools.WcsToUcs(Autodesk.AutoCAD.Geometry.Point3d)">
+            <summary>
+            将点从WCS转换成UCS。
+            </summary>
+            <param name="pt">要转换的点</param>
+            <returns>转换的点</returns>        
+        </member>
+        <member name="M:DNA.Tools.WcsToUcs(Autodesk.AutoCAD.Geometry.Vector3d)">
+            <summary>
+            将向量从WCS转换成UCS
+            </summary>
+            <param name="vec">要转换的向量</param>
+            <returns>转换的向量</returns>        
+        </member>
+        <member name="M:DNA.Tools.UcsToWcs(Autodesk.AutoCAD.DatabaseServices.ObjectId)">
+            <summary>
+            将实体从UCS转换成WCS.
+            </summary>
+            <param name="entId">要转换的实体的ObjectId</param>
+        </member>
+        <member name="M:DNA.Tools.UcsToWcs(Autodesk.AutoCAD.DatabaseServices.ObjectIdCollection)">
+            <summary>
+            将多个实体从UCS转换成WCS.
+            </summary>
+            <param name="entIds">要转换的多个实体的ObjectId</param>
+        </member>
+        <member name="M:DNA.Tools.WcsToUcs(Autodesk.AutoCAD.DatabaseServices.ObjectId)">
+            <summary>
+            将实体从WCS转换成UCS.
+            </summary>
+            <param name="entId">要转换的实体的ObjectId</param>
+        </member>
+        <member name="M:DNA.Tools.WcsToUcs(Autodesk.AutoCAD.DatabaseServices.ObjectIdCollection)">
+            <summary>
+            将多个实体从WCS转换成UCS.
+            </summary>
+            <param name="entIds">要转换的多个实体的ObjectId</param>
+        </member>
+        <member name="M:DNA.Tools.GetSymbolTableId(System.Type,Autodesk.AutoCAD.DatabaseServices.Database)">
+            <summary>
+            给定一个符号表的类型，查找符合这个类型的符号表。这主要用于我们不能提前知道要处理的对象是什么类型的时候，找到所属的符号表。
+            </summary>
+            <param name="classType">符号表的类型</param>
+            <param name="db">指定数据库</param>
+            <returns>符号表所属的符号表的ObjectId</returns>
+        </member>
+        <member name="M:DNA.Tools.GetSymbolTableRecId(System.Type,System.String,Autodesk.AutoCAD.DatabaseServices.Database)">
+            <summary>
+            获取一个有名符号表记录的ObjectId。
+            </summary>
+            <param name="classType">符号表记录的类型</param>
+            <param name="symName">符号表记录的名字</param>
+            <param name="db">指定数据库</param>
+            <returns>符号表记录所属的符号表的ObjectId</returns>
+        </member>
+        <member name="M:DNA.Tools.SymbolTableRecExists(System.Type,System.String,Autodesk.AutoCAD.DatabaseServices.Database)">
+            <summary>
+            查找一个给定名称的符号表记录是否已经存在。
+            </summary>
+            <param name="classType">符号表记录的类型(如LayerTableRecord)</param>
+            <param name="symName">符号表记录的名称</param>
+            <param name="db">指定数据库</param>
+            <returns>如果存在给定名称的符号表记录返回true,否则返回false</returns>
+        </member>
+        <member name="M:DNA.Tools.GetOrLoadLinetypeId(System.String,Autodesk.AutoCAD.DatabaseServices.Database)">
+            <summary>
+            获取一个有名线型的ObjectId。如果图形中不存在指定的线型，则会尝试从AutoCAD的标准线型文件中装载它。
+            </summary>
+            <param name="ltypeName">线型名</param>
+            <param name="db">指定数据库</param>
+            <returns>有名线型的ObjectId，如果不存在或无法装载则返回CONTINUOUS线型的ObjectId</returns>
+        </member>
+        <member name="M:DNA.Tools.SymbolTableRecExists(System.Type,System.String)">
+            <summary>
+            查找一个给定名称的符号表记录是否已经存在。
+            </summary>
+            <param name="classType">符号表记录的类型(如LayerTableRecord)</param>
+            <param name="name">符号表记录的名称</param>
+            <returns>如果存在给定名称的符号表记录返回true,否则返回false</returns>
+        </member>
+        <member name="M:DNA.Tools.AddNewSymbolRec(Autodesk.AutoCAD.DatabaseServices.Database,Autodesk.AutoCAD.DatabaseServices.SymbolTableRecord)">
+            <summary>
+            向数据库添加一个新的符号表记录。
+            </summary>
+            <param name="db">指定数据库</param>
+            <param name="newRec">一个新建而没有被加入到数据库的符号表记录</param>
+        </member>
+        <member name="M:DNA.Tools.SymbolIdToName(Autodesk.AutoCAD.DatabaseServices.ObjectId)">
+            <summary>
+            根据符号表记录的ObjectId，获取它的名字。
+            </summary>
+            <param name="symId">符号表记录的ObjectId</param>
+            <returns>符号表记录的名字</returns>
+        </member>
+        <member name="M:DNA.Tools.IsOnLockedLayer(Autodesk.AutoCAD.DatabaseServices.Entity)">
+            <summary>
+            查找给定的实体是否位于锁定的层上。
+            </summary>
+            <param name="ent">给定的实体</param>
+            <returns>如果实体位于锁定的层上返回true，否则返回false</returns>
+        </member>
+        <member name="M:DNA.Tools.SetFocusToWindow(Autodesk.AutoCAD.Windows.Window)">
+            <summary>
+            设置键盘的焦点到指定的窗口。
+            </summary>
+            <param name="window">接收键盘输入的窗口</param>
+        </member>
+        <member name="M:DNA.Tools.WblockCloneObjects(Autodesk.AutoCAD.DatabaseServices.Database,Autodesk.AutoCAD.DatabaseServices.DBObject[],Autodesk.AutoCAD.DatabaseServices.ObjectId,Autodesk.AutoCAD.DatabaseServices.DuplicateRecordCloning)">
+            <summary>
+            复制ojs数组中的所有对象并把它们加入到由id指定的对象中。 
+            </summary>
+            <param name="db">指定数据库</param>
+            <param name="objs">所要复制的对象集合</param>
+            <param name="id">复制好的对象所属的对象的object ID</param>
+            <param name="cloning">复制的类型</param>
+        </member>
+        <member name="M:DNA.Tools.ModelSpaceId(Autodesk.AutoCAD.DatabaseServices.Database)">
+            <summary>
+            获取模型空间的ObjectId。
+            </summary>
+            <param name="db">指定的数据库</param>
+            <returns>模型空间的ObjectId</returns>
+        </member>
+        <member name="M:DNA.Tools.PaperSpaceId(Autodesk.AutoCAD.DatabaseServices.Database)">
+            <summary>
+            获取图纸空间的ObjectId。
+            </summary>
+            <param name="db">指定的数据库</param>
+            <returns>图纸空间的ObjectId</returns>
+        </member>
+        <member name="M:DNA.Tools.LayerDefpointsId(Autodesk.AutoCAD.DatabaseServices.Database)">
+            <summary>
+            获取Defpoints层的ObjectId。
+            </summary>
+            <param name="db">指定的数据库</param>
+            <returns>Defpoints层的ObjectId</returns>
+        </member>
+        <member name="M:DNA.Tools.LayerZeroId(Autodesk.AutoCAD.DatabaseServices.Database)">
+            <summary>
+            获取0层的ObjectId.
+            </summary>
+            <param name="db">指定的数据库</param>
+            <returns>0层的ObjectId</returns>
+        </member>
+        <member name="M:DNA.Tools.LinetypeByBlockId(Autodesk.AutoCAD.DatabaseServices.Database)">
+            <summary>
+            获取ByBlock线型的ObjectId.
+            </summary>
+            <param name="db">指定的数据库</param>
+            <returns>ByBlock线型的ObjectId</returns>
+        </member>
+        <member name="M:DNA.Tools.LinetypeByLayerId(Autodesk.AutoCAD.DatabaseServices.Database)">
+            <summary>
+            获取ByLayer线型的ObjectId.
+            </summary>
+            <param name="db">指定的数据库</param>
+            <returns>ByLayer线型的ObjectId</returns>
+        </member>
+        <member name="M:DNA.Tools.LinetypeContinuousId(Autodesk.AutoCAD.DatabaseServices.Database)">
+            <summary>
+            获取Continuous线型的ObjectId.
+            </summary>
+            <param name="db">指定的数据库</param>
+            <returns>Continuous线型的ObjectId</returns>
+        </member>
+        <member name="M:DNA.Tools.RegAppAcadId(Autodesk.AutoCAD.DatabaseServices.Database)">
+            <summary>
+            获取RegAppAcad的ObjectId。
+            </summary>
+            <param name="db">指定的数据库</param>
+            <returns>RegAppAcad的ObjectId</returns>
+        </member>
+        <member name="M:DNA.Tools.TextStyleStandardId(Autodesk.AutoCAD.DatabaseServices.Database)">
+            <summary>
+            获取Standard文字样式的ObjectId。
+            </summary>
+            <param name="db">指定的数据库</param>
+            <returns>Standard文字样式的ObjectId</returns>
+        </member>
+        <member name="M:DNA.Tools.LineWeightToPixel(Autodesk.AutoCAD.EditorInput.Editor,Autodesk.AutoCAD.DatabaseServices.LineWeight)">
+            <summary>
+            转换一个线宽值为像素值。
+            </summary>
+            <param name="ed">命令行编辑器对象</param>
+            <param name="lineWeight">线宽值</param>
+            <returns>像素值</returns>
+        </member>
+        <member name="M:DNA.Tools.RegenLayers(Autodesk.AutoCAD.EditorInput.Editor,Autodesk.AutoCAD.DatabaseServices.ObjectId[])">
+            <summary>
+            重生成层。
+            </summary>
+            <param name="ed">命令行编辑器对象</param>
+            <param name="layers">要重生成的层的object id</param>
+        </member>
+        <member name="M:DNA.Tools.GraphScr(Autodesk.AutoCAD.EditorInput.Editor)">
+            <summary>
+            在单屏幕AutoCAD下，从文本窗口切换到图形窗口。
+            </summary>
+            <param name="ed">命令行编辑器对象</param>
+        </member>
+        <member name="M:DNA.Tools.TextScr(Autodesk.AutoCAD.EditorInput.Editor)">
+            <summary>
+            在单屏幕AutoCAD下，从图形窗口切换到文本形窗口。
+            </summary>
+            <param name="ed">命令行编辑器对象</param>
+        </member>
+        <member name="M:DNA.Tools.EntLast(Autodesk.AutoCAD.DatabaseServices.Database)">
+            <summary>
+            获取数据库中最后一个实体的object id。
+            </summary>
+            <param name="db">数据库对象</param>
+            <returns>最后一个实体的object id</returns>
+        </member>
+        <member name="M:DNA.Tools.EntFirst(Autodesk.AutoCAD.DatabaseServices.Database)">
+            <summary>
+            获取数据库中第一个实体的object id。
+            </summary>
+            <param name="db">数据库对象</param>
+            <returns>数据库中第一个实体的object id</returns>
+        </member>
+        <member name="M:DNA.Tools.EntNext(Autodesk.AutoCAD.DatabaseServices.Database,Autodesk.AutoCAD.DatabaseServices.ObjectId)">
+            <summary>
+            获取数据库中指定实体的下一个实体的object id。
+            </summary>
+            <param name="db">数据库对象</param>
+            <param name="entId">指定实体的Object Id</param>
+            <returns>数据库中指定实体的下一个实体的object id</returns>
+        </member>
+        <member name="P:DNA.Tools.Database">
+            <summary>
+            获取当前数据库。
+            </summary>
+        </member>
+        <member name="P:DNA.Tools.Editor">
+            <summary>
+            获取AutoCAD命令行对象。
+            </summary>
+        </member>
+        <member name="P:DNA.Tools.TransactionManager">
+            <summary>
+            获取当前数据库的事务处理管理器。
+            </summary>
+        </member>
+        <member name="P:DNA.Tools.Document">
+            <summary>
+            获取当前数据库的活动文档。
+            </summary>
+        </member>
+        <member name="T:DNA.Tools.RedrawMode">
+            <summary>
+            Tools.ReDraw的重绘模式。
+            </summary>
+        </member>
+        <member name="F:DNA.Tools.RedrawMode.RedrawEntity">
+            <summary>
+            重绘实体
+            </summary>
+        </member>
+        <member name="F:DNA.Tools.RedrawMode.UndrawEntity">
+            <summary>
+            不绘制实体
+            </summary>
+        </member>
+        <member name="F:DNA.Tools.RedrawMode.HighlightEntity">
+            <summary>
+            亮显实体
+            </summary>
+        </member>
+        <member name="F:DNA.Tools.RedrawMode.UnHighlightEntity">
+            <summary>
+            不亮显实体
+            </summary>
+        </member>
+        <member name="T:DNA.Tools.CoordinateSystem">
+            <summary>
+            坐标系统
+            </summary>
+        </member>
+        <member name="F:DNA.Tools.CoordinateSystem.WCS">
+            <summary>
+            世界坐标(WCS)
+            </summary>
+        </member>
+        <member name="F:DNA.Tools.CoordinateSystem.UCS">
+            <summary>
+            用户坐标(当前UCS)
+            </summary>
+        </member>
+        <member name="F:DNA.Tools.CoordinateSystem.DisplayDCS">
+            <summary>
+              当使用WCS或UCS时为当前视口的DCS，当使用PaperSpaceDCS时为当前模型空间视口的DCS
+            </summary>
+        </member>
+        <member name="F:DNA.Tools.CoordinateSystem.PaperSpaceDCS">
+            <summary>
+            图纸空间DCS(PSDCS; 只在有DisplayDCS的代码中使用)
+            </summary>
+        </member>
+        <member name="T:DNA.HatchPalletteDialog">
+            <summary>
+            这个类表示图案填充选择对话框。
+            </summary>
+        </member>
+        <member name="M:DNA.HatchPalletteDialog.#ctor(System.Boolean)">
+            <summary>
+            Constructor.
+            </summary>
+            <param name="showCustom">是否显示已经添加到搜索路径中自定义PAT文件列表</param>
+        </member>
+        <member name="M:DNA.HatchPalletteDialog.ShowDialog">
+             <summary>
+             显示图案填充选择对话框。
+             </summary>
+             <returns>System.Windows.Forms.DialogResult值</returns>
+             <example>下面的例子展示如何使用HatchPalletteDialog类。
+             <code escaped="true">
+             public void HatchDlg() 
+            {
+                //Define a HatchPalletteDialog object with custom P 
+                HatchPalletteDialog dlg = new HatchPalletteDialog(true);
+                //If the OK button is pressed
+                if (dlg.ShowDialog()==DialogResult.OK)
+                {
+                    string patternName = dlg.PatternName;//Get the name of the selected pattern
+                    //print the name to the command line,PrintToCmdLine is a method defined by DotNetARX.Tools class
+                    Tools.Editor.WriteMessage("\nYou select the hatch pattern: " + patternName);
+                }
+            }
+             </code>
+             </example>
+        </member>
+        <member name="P:DNA.HatchPalletteDialog.ShowCustom">
+            <summary>
+            获取或设置是否显示已经添加到搜索路径中自定义PAT文件列表。
+            </summary>
+        </member>
+        <member name="P:DNA.HatchPalletteDialog.PatternName">
+            <summary>
+            获取或设置用户选择或缺省的填充样式名。
+            </summary>
+        </member>
+        <member name="T:DNA.LinqToARX">
+            <summary>
+            LinqToARX类提供了一些很有用的功能来支持.NET3.5中的Linq功能。
+            </summary>
+        </member>
+        <member name="M:DNA.LinqToARX.GetAllEntitiesInModelSpace(Autodesk.AutoCAD.DatabaseServices.Database,Autodesk.AutoCAD.DatabaseServices.Transaction,Autodesk.AutoCAD.DatabaseServices.OpenMode)">
+            <summary>
+            获取db模型空间中的所有实体。
+            </summary>
+            <param name="db">指定数据库</param>
+            <param name="trans">输入事务处理对象</param>
+            <param name="openMode">对象打开的方式</param>
+            <returns>获得的实体</returns>
+        </member>
+        <member name="M:DNA.LinqToARX.GetAllEntitiesInModelSpace(Autodesk.AutoCAD.DatabaseServices.Database,Autodesk.AutoCAD.DatabaseServices.Transaction,Autodesk.AutoCAD.DatabaseServices.OpenMode,System.Boolean)">
+            <summary>
+            获取db模型空间中的所有实体。
+            </summary>
+            <param name="db">指定数据库</param>
+            <param name="trans">输入事务处理对象</param>
+            <param name="openMode">对象打开的方式</param>
+            <param name="openErased">是否获取已删除的实体</param>
+            <returns>获得的实体</returns>
+        </member>
+        <member name="M:DNA.LinqToARX.GetAllEntitiesInModelSpace``1(Autodesk.AutoCAD.DatabaseServices.Database,Autodesk.AutoCAD.DatabaseServices.Transaction,Autodesk.AutoCAD.DatabaseServices.OpenMode)">
+            <summary>
+            获取db模型空间中的所有类型为T的实体。
+            </summary>
+            <typeparam name="T">实体的类型</typeparam>
+            <param name="db">指定数据库</param>
+            <param name="trans">输入事务处理对象</param>
+            <param name="openMode">对象打开的方式</param>
+            <returns>获得类型为T的实体</returns>
+        </member>
+        <member name="M:DNA.LinqToARX.GetAllEntitiesInModelSpace``1(Autodesk.AutoCAD.DatabaseServices.Database,Autodesk.AutoCAD.DatabaseServices.Transaction,Autodesk.AutoCAD.DatabaseServices.OpenMode,System.Boolean)">
+            <summary>
+            获取db模型空间中的所有类型为T的实体。
+            </summary>
+            <typeparam name="T">实体的类型</typeparam>
+            <param name="db">指定数据库</param>
+            <param name="trans">输入事务处理对象</param>
+            <param name="openMode">对象打开的方式</param>
+            <param name="openErased">是否获取已删除的实体</param>
+            <returns>获得类型为T的实体</returns>
+        </member>
+        <member name="M:DNA.LinqToARX.GetAllEntitiesInPaperSpace(Autodesk.AutoCAD.DatabaseServices.Database,Autodesk.AutoCAD.DatabaseServices.Transaction,Autodesk.AutoCAD.DatabaseServices.OpenMode)">
+            <summary>
+            获取db图纸空间中的所有实体。
+            </summary>
+            <param name="db">指定数据库</param>
+            <param name="trans">输入事务处理对象</param>
+            <param name="openMode">对象打开的方式</param>
+            <returns>获得的实体</returns>
+        </member>
+        <member name="M:DNA.LinqToARX.GetAllEntitiesInPaperSpace(Autodesk.AutoCAD.DatabaseServices.Database,Autodesk.AutoCAD.DatabaseServices.Transaction,Autodesk.AutoCAD.DatabaseServices.OpenMode,System.Boolean)">
+            <summary>
+            获取db图纸空间中的所有实体。
+            </summary>
+            <param name="db">指定数据库</param>
+            <param name="trans">输入事务处理对象</param>
+            <param name="openMode">对象打开的方式</param>
+            <param name="openErased">是否获取已删除的实体</param>
+            <returns>获得的实体</returns>
+        </member>
+        <member name="M:DNA.LinqToARX.GetAllEntitiesInPaperSpace``1(Autodesk.AutoCAD.DatabaseServices.Database,Autodesk.AutoCAD.DatabaseServices.Transaction,Autodesk.AutoCAD.DatabaseServices.OpenMode)">
+            <summary>
+            获取db图纸空间中的所有类型为T的实体。
+            </summary>
+            <typeparam name="T">实体的类型</typeparam>
+            <param name="db">指定数据库</param>
+            <param name="trans">输入事务处理对象</param>
+            <param name="openMode">对象打开的方式</param>
+            <returns>获得类型为T的实体</returns>
+        </member>
+        <member name="M:DNA.LinqToARX.GetAllEntitiesInPaperSpace``1(Autodesk.AutoCAD.DatabaseServices.Database,Autodesk.AutoCAD.DatabaseServices.Transaction,Autodesk.AutoCAD.DatabaseServices.OpenMode,System.Boolean)">
+            <summary>
+            获取db图纸空间中的所有类型为T的实体。
+            </summary>
+            <typeparam name="T">实体的类型</typeparam>
+            <param name="db">指定数据库</param>
+            <param name="trans">输入事务处理对象</param>
+            <param name="openMode">对象打开的方式</param>
+            <param name="openErased">是否获取已删除的实体</param>
+            <returns>获得类型为T的实体</returns>
+        </member>
+        <member name="M:DNA.LinqToARX.GetAllLayers(Autodesk.AutoCAD.DatabaseServices.Database,Autodesk.AutoCAD.DatabaseServices.Transaction,Autodesk.AutoCAD.DatabaseServices.OpenMode)">
+            <summary>
+            获取db中的所有层。
+            </summary>
+            <param name="db">指定数据库</param>
+            <param name="trans">输入事务处理对象</param>
+            <param name="openMode">对象打开的方式</param>
+            <returns>db中的所有层</returns>
+        </member>
+        <member name="M:DNA.LinqToARX.GetAllBlocks(Autodesk.AutoCAD.DatabaseServices.Database,Autodesk.AutoCAD.DatabaseServices.Transaction,Autodesk.AutoCAD.DatabaseServices.OpenMode)">
+            <summary>
+            获取db中的所有块。
+            </summary>
+            <param name="db">指定数据库</param>
+            <param name="trans">输入事务处理对象</param>
+            <param name="openMode">对象打开的方式</param>
+            <returns>db中的所有块</returns>
+        </member>
+        <member name="M:DNA.LinqToARX.GetAllTextStyles(Autodesk.AutoCAD.DatabaseServices.Database,Autodesk.AutoCAD.DatabaseServices.Transaction,Autodesk.AutoCAD.DatabaseServices.OpenMode)">
+            <summary>
+            获取db中所有的文字样式。
+            </summary>
+            <param name="db">指定数据库</param>
+            <param name="trans">输入事务处理对象</param>
+            <param name="openMode">对象打开的方式</param>
+            <returns>db中所有的文字样式</returns>
+        </member>
+        <member name="M:DNA.LinqToARX.GetAllLinetypes(Autodesk.AutoCAD.DatabaseServices.Database,Autodesk.AutoCAD.DatabaseServices.Transaction,Autodesk.AutoCAD.DatabaseServices.OpenMode)">
+            <summary>
+            获取db中所有的线型.
+            </summary>
+            <param name="db">指定数据库</param>
+            <param name="trans">输入事务处理对象</param>
+            <param name="openMode">对象打开的方式</param>
+            <returns>db中所有的线型</returns>
+        </member>
+        <member name="M:DNA.LinqToARX.GetAllViews(Autodesk.AutoCAD.DatabaseServices.Database,Autodesk.AutoCAD.DatabaseServices.Transaction,Autodesk.AutoCAD.DatabaseServices.OpenMode)">
+            <summary>
+            获取db中所有的视图。
+            </summary>
+            <param name="db">指定数据库</param>
+            <param name="trans">输入事务处理对象</param>
+            <param name="openMode">对象打开的方式</param>
+            <returns>db中所有的视图</returns>
+        </member>
+        <member name="M:DNA.LinqToARX.GetAllUcss(Autodesk.AutoCAD.DatabaseServices.Database,Autodesk.AutoCAD.DatabaseServices.Transaction,Autodesk.AutoCAD.DatabaseServices.OpenMode)">
+            <summary>
+            获取db中所有的UCS。
+            </summary>
+            <param name="db">指定数据库</param>
+            <param name="trans">输入事务处理对象</param>
+            <param name="openMode">对象打开的方式</param>
+            <returns>db中所有的UCS</returns>
+        </member>
+        <member name="M:DNA.LinqToARX.GetAllViewports(Autodesk.AutoCAD.DatabaseServices.Database,Autodesk.AutoCAD.DatabaseServices.Transaction,Autodesk.AutoCAD.DatabaseServices.OpenMode)">
+            <summary>
+            获取db所有的视口。
+            </summary>
+            <param name="db">指定数据库</param>
+            <param name="trans">输入事务处理对象</param>
+            <param name="openMode">对象打开的方式</param>
+            <returns>db所有的视口</returns>
+        </member>
+        <member name="M:DNA.LinqToARX.GetAllRegApps(Autodesk.AutoCAD.DatabaseServices.Database,Autodesk.AutoCAD.DatabaseServices.Transaction,Autodesk.AutoCAD.DatabaseServices.OpenMode)">
+            <summary>
+            获取db中所有的注册应用程序。
+            </summary>
+            <param name="db">指定数据库</param>
+            <param name="trans">输入事务处理对象</param>
+            <param name="openMode">对象打开的方式</param>
+            <returns>db中所有的注册应用程序</returns>
+        </member>
+        <member name="M:DNA.LinqToARX.GetAllDimStyles(Autodesk.AutoCAD.DatabaseServices.Database,Autodesk.AutoCAD.DatabaseServices.Transaction,Autodesk.AutoCAD.DatabaseServices.OpenMode)">
+            <summary>
+            获取db中所有的标注样式。
+            </summary>
+            <param name="db">指定数据库</param>
+            <param name="trans">输入事务处理对象</param>
+            <param name="openMode">对象打开的方式</param>
+            <returns>db中所有的标注样式</returns>
+        </member>
+        <member name="M:DNA.LinqToARX.GetBlockReferencesByName(Autodesk.AutoCAD.DatabaseServices.Database,Autodesk.AutoCAD.DatabaseServices.Transaction,Autodesk.AutoCAD.DatabaseServices.OpenMode,System.String)">
+            <summary>
+            获取db中所有的块参照。
+            </summary>
+            <param name="db">指定数据库</param>
+            <param name="trans">输入事务处理对象</param>
+            <param name="openMode">对象打开的方式</param>
+            <param name="blockName">块参照所属的块名</param>
+            <returns>db中所有名为blockName的块参照</returns>
+        </member>
+        <member name="M:DNA.LinqToARX.GetBlockAttributesByName(Autodesk.AutoCAD.DatabaseServices.Database,Autodesk.AutoCAD.DatabaseServices.Transaction,Autodesk.AutoCAD.DatabaseServices.OpenMode,System.String,System.String)">
+            <summary>
+            获取db中名为"blockName"的块参照中"attributeName"属性。
+            </summary>
+            <param name="db">指定数据库</param>
+            <param name="trans">输入事务处理对象</param>
+            <param name="openMode">对象打开的方式</param>
+            <param name="blockName">块名</param>
+            <param name="attributeName">属性名</param>
+            <returns>"attributeName"属性</returns>
+        </member>
+        <member name="M:DNA.LinqToARX.GetEntitiesInBlock(Autodesk.AutoCAD.DatabaseServices.Database,Autodesk.AutoCAD.DatabaseServices.Transaction,Autodesk.AutoCAD.DatabaseServices.OpenMode,System.String)">
+            <summary>
+            获取"blockName"块中的实体
+            </summary>
+            <param name="db">指定数据库</param>
+            <param name="trans">输入事务处理对象</param>
+            <param name="openMode">对象打开的方式</param>
+            <param name="blockName">块名</param>
+            <returns>"blockName"块中的实体</returns>
+        </member>
+    </members>
+</doc>
