@@ -7,8 +7,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CAD", "CAD\CAD.csproj", "{1
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Model", "Model\Model.csproj", "{3329D908-B130-45B4-9744-1A4899817716}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Window", "Window\Window.csproj", "{D449467A-5DBE-4CD1-BA2A-2A6B6514DC62}"
-EndProject
 Global
 	GlobalSection(SubversionScc) = preSolution
 		Svn-Managed = True
@@ -31,10 +29,6 @@ Global
 		{3329D908-B130-45B4-9744-1A4899817716}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3329D908-B130-45B4-9744-1A4899817716}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3329D908-B130-45B4-9744-1A4899817716}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D449467A-5DBE-4CD1-BA2A-2A6B6514DC62}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D449467A-5DBE-4CD1-BA2A-2A6B6514DC62}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D449467A-5DBE-4CD1-BA2A-2A6B6514DC62}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D449467A-5DBE-4CD1-BA2A-2A6B6514DC62}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
