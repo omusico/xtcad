@@ -50,13 +50,13 @@ namespace ActiveX
         }
 
 
-        public void downLoadAndOpenFile(string url,string fileName)
+        public void downLoadAndOpenFile(string url,string fileName,string fileId)
         {
             AcadApplication acApp = openCAD();
             if (acApp != null)
             {
                 acApp.Visible = true;
-                String filePath = "c:\\" + fileName;
+                String filePath = "c:\\xtcad\\" + fileName;
                 FileUtil.SaveFileFromUrl(filePath, url);
                 acApp.Documents.Open(filePath, false, null);
                 IntPtr appHwd = new IntPtr(acApp.HWND);
@@ -64,7 +64,8 @@ namespace ActiveX
                 SetForegroundWindow(appHwd);
                 try
                 {
-                    acApp.ActiveDocument.SendCommand("test1 11 12 ");
+                    acApp.ActiveDocument.SendCommand("AttachFileInfo " + fileId + " ");
+                    //acApp.ActiveDocument.SendCommand("test1 11 12 ");
                     //Tools.WriteMessageWithReturn("调用命令之前");
                     //Tools.RunCommand(true, "purge");
                     //Tools.WriteMessageWithReturn("调用命令之后");
