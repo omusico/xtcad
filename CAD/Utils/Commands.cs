@@ -91,15 +91,23 @@ namespace CAD
             }
         }
 
+        [CommandMethod("UserDataInfo")]
+        public static void UserDataInfo()
+        {
+            Tools.WriteMessageWithReturn(Tools.Document.UserData["文件信息"].ToString());
+        }
+
         [CommandMethod("AttachFileInfo")]
         public static void AttachFileInfo()
         {
+            Autodesk.AutoCAD.ApplicationServices.Application.SetSystemVariable("cmdecho", 0);
             string fileId = Tools.Editor.GetString("文件id").StringResult;
+            Autodesk.AutoCAD.ApplicationServices.Application.SetSystemVariable("cmdecho", 1);
             string[] args = new string[1];
             args[0] = fileId;
             object result = WebServiceHelper.InvokeWebService("UserWebservice", "getFileInfo", args);
             FileInfo fileInfo = JsonHelper.JsonDeserialize<FileInfo>(result.ToString());
-            Tools.WriteMessageWithReturn(result.ToString());
+            //Tools.WriteMessageWithReturn(result.ToString());
             Tools.Document.UserData.Add("文件信息", fileInfo);
         }
 
