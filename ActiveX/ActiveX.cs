@@ -26,6 +26,11 @@ namespace ActiveX
             InitializeComponent();
         }
 
+        public void test()
+        {
+            MessageBox.Show("test");
+        }
+
         public AcadApplication openCAD()
         {
             const string progID = "AutoCAD.Application";
@@ -52,6 +57,7 @@ namespace ActiveX
 
         public void downLoadAndOpenFile(string url,string fileName,string fileId)
         {
+            //MessageBox.Show(url + "," + fileName + "," + fileId);
             AcadApplication acApp = openCAD();
             if (acApp != null)
             {
@@ -65,12 +71,8 @@ namespace ActiveX
                 try
                 {
                     acApp.ActiveDocument.SendCommand("AttachFileInfo " + fileId + " ");
-                    //acApp.ActiveDocument.SendCommand("test1 11 12 ");
-                    //Tools.WriteMessageWithReturn("调用命令之前");
-                    //Tools.RunCommand(true, "purge");
-                    //Tools.WriteMessageWithReturn("调用命令之后");
                 }
-                catch(Exception e)
+                catch (Exception e)
                 {
                     MessageBox.Show(e.Message);
                 }
