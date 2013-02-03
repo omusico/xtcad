@@ -19,6 +19,7 @@ using System.Diagnostics;
 using System.Runtime.InteropServices;
 using DNA;
 using com.ccepc.entities;
+using Autodesk.AutoCAD.Windows;
 
 [assembly: ExtensionApplication(typeof(CAD.AppInitialization))]
 namespace CAD
@@ -29,6 +30,8 @@ namespace CAD
         public static User loginUser;
         private static ToolsForm toolsform;
         private static TabbedDialogExtension optiontab;
+        public static Pane userInfoPanel;
+        public static Pane fileInfoPanel;
 
         void DocumentManager_DocumentActivated(object sender, DocumentCollectionEventArgs e)
         {
@@ -73,6 +76,19 @@ namespace CAD
             Commands.InfoTips();
             //注册插件选项设置面板
             AcadApp.DisplayingOptionDialog += new TabbedDialogEventHandler(AcadApp_DisplayingOptionDialog);
+
+            userInfoPanel = new Pane();
+            userInfoPanel.Visible = true;
+            userInfoPanel.Enabled = true;
+            userInfoPanel.Style = PaneStyles.Normal;
+
+            fileInfoPanel = new Pane();
+            fileInfoPanel.Visible = true;
+            fileInfoPanel.Enabled = true;
+            fileInfoPanel.Style = PaneStyles.Normal;
+
+            AcadApp.StatusBar.Panes.Add(userInfoPanel);
+            AcadApp.StatusBar.Panes.Add(fileInfoPanel);
         }
 
         void IExtensionApplication.Terminate()

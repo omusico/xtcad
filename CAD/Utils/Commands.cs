@@ -45,7 +45,6 @@ namespace CAD
             pm.AddMenuItem(pm.Count + 1, "注销", "_Logout ");
         }
 
-
         [CommandMethod("PathTest")]
         public static void PathTest()
         {

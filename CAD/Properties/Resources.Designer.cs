@@ -8138,6 +8138,13 @@ namespace CAD.Properties {
             }
         }
         
+        internal static System.Drawing.Bitmap settings {
+            get {
+                object obj = ResourceManager.GetObject("settings", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap shading {
             get {
                 object obj = ResourceManager.GetObject("shading", resourceCulture);
