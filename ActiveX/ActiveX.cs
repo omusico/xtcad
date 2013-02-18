@@ -28,7 +28,7 @@ namespace ActiveX
 
         public void test()
         {
-            MessageBox.Show("test");
+            MessageBox.Show("123");
         }
 
         public AcadApplication openCAD()
@@ -62,20 +62,14 @@ namespace ActiveX
             if (acApp != null)
             {
                 acApp.Visible = true;
-                String filePath = "c:\\xtcad\\" + fileName;
+                string filePath = "c:\\xtcad\\" + fileName;
                 FileUtil.SaveFileFromUrl(filePath, url);
                 acApp.Documents.Open(filePath, false, null);
+                //acApp.ActiveDocument.SendCommand("OpenServerFile " + fileName + " " + url + " ");
+                acApp.ActiveDocument.SendCommand("AttachFileInfo " + fileId + " ");
                 IntPtr appHwd = new IntPtr(acApp.HWND);
                 ShowWindow(appHwd, 3);
                 SetForegroundWindow(appHwd);
-                try
-                {
-                    acApp.ActiveDocument.SendCommand("AttachFileInfo " + fileId + " ");
-                }
-                catch (Exception e)
-                {
-                    MessageBox.Show(e.Message);
-                }
             }
         }
 

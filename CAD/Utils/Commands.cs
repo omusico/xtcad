@@ -16,7 +16,6 @@ using com.ccepc.utils;
 using com.ccepc.entities;
 using DNA;
 using Autodesk.AutoCAD.Interop;
-using acadApp = Autodesk.AutoCAD.ApplicationServices.Application;
 using System.Configuration;
 using AcadApp = Autodesk.AutoCAD.ApplicationServices.Application;
 
@@ -25,6 +24,13 @@ namespace CAD
 
     public static class Commands
     {
+        //将窗口显示
+        [DllImport("user32.dll", EntryPoint = "ShowWindow", CharSet = CharSet.Auto)]
+        private static extern int ShowWindow(IntPtr hWnd, int nCmdShow);
+        //切换窗体显示
+        [DllImport("user32.dll")]
+        public static extern bool SetForegroundWindow(IntPtr hWnd);
+
         [DllImport("acad.exe", EntryPoint = "?acedGetUserFavoritesDir@@YAHPA_W@Z", CharSet = CharSet.Auto)]
         public static extern bool acedGetUserFavoritesDir([MarshalAs(UnmanagedType.LPWStr)] StringBuilder sDir);
 
@@ -93,27 +99,62 @@ namespace CAD
         [CommandMethod("UserDataInfo")]
         public static void UserDataInfo()
         {
-            Tools.WriteMessageWithReturn(Tools.Document.UserData["文件信息"].ToString());
+            FileInfo fileInfo = (FileInfo)Tools.Document.UserData["文件信息"];
+            CheckStage checkStage = (CheckStage)Tools.Document.UserData["操作信息"];
+            if(fileInfo != null)
+            {
+                Tools.WriteMessageWithReturn("文件信息:" + fileInfo.fileName);
+            }
+            if (checkStage != null)
+            {
+                Tools.WriteMessageWithReturn("操作信息:" + checkStage.stageName);
+            }
+            
         }
 
         [CommandMethod("AttachFileInfo")]
         public static void AttachFileInfo()
         {
-            Autodesk.AutoCAD.ApplicationServices.Application.SetSystemVariable("cmdecho", 0);
+            AcadApp.SetSystemVariable("cmdecho", 0);
             string fileId = Tools.Editor.GetString("文件id").StringResult;
-            Autodesk.AutoCAD.ApplicationServices.Application.SetSystemVariable("cmdecho", 1);
+            AcadApp.SetSystemVariable("cmdecho", 1);
             string[] args = new string[1];
             args[0] = fileId;
             object result = WebServiceHelper.InvokeWebService("UserWebservice", "getFileInfo", args);
             FileInfo fileInfo = JsonHelper.JsonDeserialize<FileInfo>(result.ToString());
-            //Tools.WriteMessageWithReturn(result.ToString());
+            AppInitialization.fileInfoPanel.Text = "文件信息：" + fileInfo.fileName;
             Tools.Document.UserData.Add("文件信息", fileInfo);
+            if(fileInfo.currentOperator.id == AppInitialization.loginUser.id)
+            {
+                Tools.Document.UserData.Add("操作信息",fileInfo.currentCheck);
+            }
+            
         }
 
         [CommandMethod("Logout")]
         public static void Logout()
         {
             AppInitialization.loginUser = null;
+            AppInitialization.userInfoPanel.Text = "用户未登陆!";
+        }
+
+        [CommandMethod("OpenServerFile")]
+        public static void OpenServerFile()
+        {
+            string fileName = Tools.Editor.GetString("文件名").StringResult;
+            string url = Tools.Editor.GetString("文件来源").StringResult;
+            string filePath = "c:\\xtcad\\" + fileName;
+            FileUtil.SaveFileFromUrl(filePath, url);
+            AcadApplication acadApp = (AcadApplication)AcadApp.AcadApplication;
+            acadApp.Documents.Open(filePath, false, null);
+            //string filePath = "c:\\xtcad\\" + fileName;
+            //FileUtil.SaveFileFromUrl(filePath, url);
+            //CommonTools.OpenDoc(filePath);
+            //AcadApplication acadApp = (AcadApplication)AcadApp.AcadApplication;
+            //IntPtr appHwd = new IntPtr(acadApp.HWND);
+            //ShowWindow(appHwd, 3);
+            //SetForegroundWindow(appHwd);
+            //acadApp.Documents.Open(filePath, false, null);
         }
 
         [CommandMethod("test")]
@@ -145,12 +186,13 @@ namespace CAD
         [CommandMethod("ArxTest")]
         public static void ArxTest()
         {
-            Editor ed = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument.Editor;
             StringBuilder sDir = new StringBuilder(256);
             bool bRet = acedGetUserFavoritesDir(sDir);
 
             if (bRet && sDir.Length > 0)
-                ed.WriteMessage("收藏夹目录为: " + sDir.ToString());
+            {
+                Tools.WriteMessageWithReturn("收藏夹目录为: " + sDir.ToString());
+            }
         }
 
         [CommandMethod("InfoTips")]
@@ -170,7 +212,7 @@ namespace CAD
             else
             {
                 SaveFileForm saveFileForm = new SaveFileForm();
-                acadApp.ShowModelessDialog(saveFileForm);
+                AcadApp.ShowModelessDialog(saveFileForm);
                 //saveFileForm.ShowDialog();
             }
         }

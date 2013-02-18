@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Autodesk.AutoCAD.ApplicationServices;
+using AcadApp = Autodesk.AutoCAD.ApplicationServices.Application;
 using System.Windows.Forms;
 using Autodesk.AutoCAD.DatabaseServices;
 using System.Collections;
 using DNA;
+using Autodesk.AutoCAD.ApplicationServices;
 
 namespace CAD
 {
@@ -18,9 +19,16 @@ namespace CAD
             //如果指定文件名的文件存在，则
             if (System.IO.File.Exists(path))
             {
-                DocumentCollection docs = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager;
+                DocumentCollection docs = AcadApp.DocumentManager;
                 //打开所选择的Dwg文件
-                doc = docs.Open(path, false);
+                try
+                {
+                    doc = docs.Open(path, false);
+                }
+                catch (Exception e)
+                {
+                    MessageBox.Show(e.Message);
+                }
             }
             return doc;
         }
@@ -49,12 +57,12 @@ namespace CAD
                 else
                 {
                     // Activate the document, so we can check DBMOD
-                    if (Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument != dwgDoc)
+                    if (AcadApp.DocumentManager.MdiActiveDocument != dwgDoc)
                     {
-                        Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument = dwgDoc;
+                        AcadApp.DocumentManager.MdiActiveDocument = dwgDoc;
                     }
 
-                    int isModified = System.Convert.ToInt32(Autodesk.AutoCAD.ApplicationServices.Application.GetSystemVariable("DBMOD"));
+                    int isModified = System.Convert.ToInt32(AcadApp.GetSystemVariable("DBMOD"));
 
                     // No need to save if not modified
                     if (isModified != 0 && IsSave)
@@ -82,7 +90,7 @@ namespace CAD
             List<AttributeDefinition> list = new List<AttributeDefinition>();
             ObjectIdCollection ents = Tools.CollectBlockEnts(btr);
             Database db = HostApplicationServices.WorkingDatabase;
-            DocumentLock doclock = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument.LockDocument();
+            DocumentLock doclock = AcadApp.DocumentManager.MdiActiveDocument.LockDocument();
             using (Transaction trans = db.TransactionManager.StartTransaction())
             {
                 foreach (ObjectId ent in ents)
@@ -105,7 +113,7 @@ namespace CAD
             AttributeDefinition att = null;
             ObjectIdCollection ents = Tools.CollectBlockEnts(btr);
             Database db = HostApplicationServices.WorkingDatabase;
-            DocumentLock doclock = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument.LockDocument();
+            DocumentLock doclock = AcadApp.DocumentManager.MdiActiveDocument.LockDocument();
             using (Transaction trans = db.TransactionManager.StartTransaction())
             {
                 foreach (ObjectId ent in ents)

@@ -36,6 +36,15 @@ namespace CAD
         void DocumentManager_DocumentActivated(object sender, DocumentCollectionEventArgs e)
         {
             G.InvalidDocument();
+            com.ccepc.entities.FileInfo fileInfo = (com.ccepc.entities.FileInfo)G.Doc.UserData["文件信息"];
+            if (fileInfo == null)
+            {
+                fileInfoPanel.Text = "";
+            }
+            else
+            {
+                fileInfoPanel.Text = "文件信息:" + fileInfo.fileName;
+            }
         }
 
         #region IExtensionApplication 成员
@@ -81,14 +90,17 @@ namespace CAD
             userInfoPanel.Visible = true;
             userInfoPanel.Enabled = true;
             userInfoPanel.Style = PaneStyles.Normal;
+            userInfoPanel.Text = "用户未登陆!";
 
             fileInfoPanel = new Pane();
             fileInfoPanel.Visible = true;
             fileInfoPanel.Enabled = true;
             fileInfoPanel.Style = PaneStyles.Normal;
+            userInfoPanel.Text = "文件未关联!";
 
-            AcadApp.StatusBar.Panes.Add(userInfoPanel);
-            AcadApp.StatusBar.Panes.Add(fileInfoPanel);
+            AcadApp.StatusBar.Panes.Insert(0,userInfoPanel);
+            AcadApp.StatusBar.Panes.Insert(1,fileInfoPanel);
+
         }
 
         void IExtensionApplication.Terminate()

@@ -107,6 +107,7 @@
     <Compile Include="Utils\Commands.cs" />
     <Compile Include="Utils\CommonTools.cs" />
     <Compile Include="Utils\DoubleClickClass.cs" />
+    <Compile Include="Utils\FileUtil.cs" />
     <Compile Include="Utils\FrameInfo.cs" />
     <Compile Include="Utils\FtpClient.cs" />
     <Compile Include="Utils\G.cs" />

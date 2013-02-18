@@ -54,6 +54,7 @@ namespace CAD
                     if (u != null)
                     {
                         AppInitialization.loginUser = u;
+                        AppInitialization.userInfoPanel.Text = "登陆用户:" + u.realName;
                         SaveHistroy();
                         Tools.WriteMessageWithReturn(u.realName + "登陆成功！");
                         this.Close();
