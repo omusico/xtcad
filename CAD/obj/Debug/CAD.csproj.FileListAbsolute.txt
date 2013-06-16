@@ -38,9 +38,6 @@ C:\Users\Administrator\Documents\Visual Studio 2008\Projects\XTCAD\CAD\obj\Debug
 C:\Users\Administrator\Documents\Visual Studio 2008\Projects\XTCAD\CAD\obj\Debug\CAD.pdb
 C:\Users\Administrator\Documents\Visual Studio 2008\Projects\XTCAD\CAD\bin\Debug\CAD.dll
 C:\Users\Administrator\Documents\Visual Studio 2008\Projects\XTCAD\CAD\bin\Debug\CAD.pdb
-C:\Users\Administrator\Documents\Visual Studio 2008\Projects\XTCAD\CAD\bin\Debug\AcCui.dll
-C:\Users\Administrator\Documents\Visual Studio 2008\Projects\XTCAD\CAD\bin\Debug\acmgdinternal.dll
-C:\Users\Administrator\Documents\Visual Studio 2008\Projects\XTCAD\CAD\bin\Debug\DotNetARX.dll
 C:\Users\Administrator\Documents\Visual Studio 2008\Projects\XTCAD\CAD\bin\Debug\Model.dll
 C:\Users\Administrator\Documents\Visual Studio 2008\Projects\XTCAD\CAD\bin\Debug\Telerik.WinControls.dll
 C:\Users\Administrator\Documents\Visual Studio 2008\Projects\XTCAD\CAD\bin\Debug\Telerik.WinControls.UI.dll
@@ -56,5 +53,5 @@ C:\Users\Administrator\Documents\Visual Studio 2008\Projects\XTCAD\CAD\bin\Debug
 C:\Users\Administrator\Documents\Visual Studio 2008\Projects\XTCAD\CAD\bin\Debug\AxInterop.DWGTHUMBNAILLib.dll
 C:\Users\Administrator\Documents\Visual Studio 2008\Projects\XTCAD\CAD\obj\Debug\Interop.DWGTHUMBNAILLib.dll
 C:\Users\Administrator\Documents\Visual Studio 2008\Projects\XTCAD\CAD\obj\Debug\AxInterop.DWGTHUMBNAILLib.dll
-C:\Users\Administrator\Documents\Visual Studio 2008\Projects\XTCAD\CAD\bin\Debug\DotNetARXMgd.dll
 C:\Users\Administrator\Documents\Visual Studio 2008\Projects\XTCAD\CAD\obj\Debug\CAD.BatchPlot.resources
+C:\Users\Administrator\Documents\Visual Studio 2008\Projects\xtcad\CAD\obj\Debug\CAD.Forms.CheckFileToolForm.resources
