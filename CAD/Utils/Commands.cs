@@ -123,7 +123,10 @@ namespace CAD
             object result = WebServiceHelper.InvokeWebService("UserWebservice", "getFileInfo", args);
             FileInfo fileInfo = JsonHelper.JsonDeserialize<FileInfo>(result.ToString());
             AppInitialization.fileInfoPanel.Text = "文件信息：" + fileInfo.fileName;
-            Tools.Document.UserData.Add("文件信息", fileInfo);
+            if(!Tools.Document.UserData.Contains("文件信息"))
+            {
+                Tools.Document.UserData.Add("文件信息", fileInfo);
+            }
             if(fileInfo.currentOperator.id == AppInitialization.loginUser.id)
             {
                 Tools.Document.UserData.Add("操作信息",fileInfo.currentCheck);
