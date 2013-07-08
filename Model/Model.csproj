@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.30729</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{3329D908-B130-45B4-9744-1A4899817716}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -31,6 +31,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Hessiancsharp, Version=1.0.1873.35216, Culture=neutral">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Bins\Hessiancsharp.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -85,6 +89,8 @@
     <Compile Include="com\ccepc\entities\User.cs" />
     <Compile Include="com\ccepc\entities\UserRole.cs" />
     <Compile Include="com\ccepc\entities\Welcome.cs" />
+    <Compile Include="com\ccepc\utils\CADService.cs" />
+    <Compile Include="com\ccepc\utils\HessianHelper.cs" />
     <Compile Include="com\ccepc\utils\JsonHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="com\ccepc\utils\WebServiceHelper.cs" />

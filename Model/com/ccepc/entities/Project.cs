@@ -32,10 +32,5 @@ namespace com.ccepc.entities
 		public int status;
 		public User creater;
 		public User manager;
-		public HashSet<FolderInfo> folderInfos;
-		public HashSet<SubProject> subProjects;
-		public HashSet<Expense> expenses;
-		public HashSet<ContractPay> contractPays;
-		public HashSet<PrintFee> printFees;
 	}
 }

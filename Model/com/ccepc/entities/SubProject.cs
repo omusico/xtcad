@@ -21,9 +21,7 @@ namespace com.ccepc.entities
 		public double designScale;
 		public double budgetScale;
 		public int prizeStatus;
-		public HashSet<FolderInfo> folderInfos;
 		public HashSet<DisciplineConfig> disciplineConfigs;
-		public HashSet<ProcessPlan> processPlans;
 		public User creater;
 		public User manager;
 		public Project project;

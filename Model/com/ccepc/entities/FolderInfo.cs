@@ -14,7 +14,7 @@ namespace com.ccepc.entities
 		public string folderType;
 		public string folderSubType;
 		public HashSet<FolderInfo> children;
-		public HashSet<FileInfo> fileInfos;
+		public HashSet<FileInfo> folderFileInfos;
 		public User creater;
 		public FolderInfo parent;
 		public Project project;

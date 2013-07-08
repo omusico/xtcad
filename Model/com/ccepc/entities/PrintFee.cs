@@ -14,6 +14,5 @@ namespace com.ccepc.entities
 		public double remainFee;
 		public string feeDesc;
 		public Project project;
-		public HashSet<PrintFeeChild> printFeeChilds;
 	}
 }

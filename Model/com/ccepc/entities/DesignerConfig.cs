@@ -21,7 +21,5 @@ namespace com.ccepc.entities
 		public User designer;
 		public DisciplineConfig disciplineConfig;
 		public HashSet<CheckManConfig> checkManConfigs;
-		public HashSet<FileInfo> fileInfos;
-		public HashSet<FolderInfo> folderInfos;
 	}
 }

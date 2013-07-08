@@ -9,7 +9,6 @@ namespace com.ccepc.entities
 		public long id;
 		public int version;
 		public string departmentName;
-		public HashSet<Discipline> disciplines;
 		public HashSet<Discipline> children;
 	}
 }

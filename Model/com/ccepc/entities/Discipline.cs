@@ -9,7 +9,6 @@ namespace com.ccepc.entities
 		public long id;
 		public int version;
 		public string disciplineName;
-		public HashSet<User> users;
 		public Department department;
 		public HashSet<User> children;
 		public List<User> managers;

@@ -17,6 +17,8 @@ namespace com.ccepc.entities
 		public string pdfPath;
 		public string swfPath;
 		public string ext;
+		public bool converted;
+		public bool uploaded;
 		public byte[] fileContent;
 		public DateTime fileDate;
 		public byte[] fileIcon;
