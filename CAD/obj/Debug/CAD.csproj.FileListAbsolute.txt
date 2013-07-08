@@ -59,3 +59,4 @@ C:\Users\Administrator\Documents\Visual Studio 2008\Projects\XTCAD\CAD\obj\Debug
 C:\Users\Administrator\Documents\Visual Studio 2008\Projects\XTCAD\CAD\obj\Debug\CAD.csproj.GenerateResource.Cache
 C:\Users\Administrator\Documents\Visual Studio 2008\Projects\XTCAD\CAD\obj\Debug\CAD.dll
 C:\Users\Administrator\Documents\Visual Studio 2008\Projects\XTCAD\CAD\obj\Debug\CAD.pdb
+C:\Users\Administrator\Documents\Visual Studio 2008\Projects\XTCAD\CAD\bin\Debug\Hessiancsharp.dll

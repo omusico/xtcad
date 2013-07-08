@@ -132,11 +132,9 @@ namespace CAD
                     {
                         Document doc = acDocMgr.Open(fileName, false);
                         Database db = doc.Database;
-                        List<ObjectId> frames = PlotUtil.GetDrawingFrames(db);
-                        foreach (ObjectId id in frames)
+                        List<FrameInfo> frames = PlotUtil.GetDrawingFrames(db);
+                        foreach (FrameInfo frameInfo in frames)
                         {
-                            
-                            FrameInfo frameInfo = PlotUtil.GetFrameSizeScale(db,id);
                             PlotUtil.Plot(doc, frameInfo.extents2d, printerCombo.Text, 3,frameInfo.scale);
                         }
                     }

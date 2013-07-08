@@ -8,11 +8,51 @@ using Autodesk.AutoCAD.DatabaseServices;
 using System.Collections;
 using DNA;
 using Autodesk.AutoCAD.ApplicationServices;
+using System.Diagnostics;
 
 namespace CAD
 {
     public class CommonTools
     {
+        public static string RunCmd(string command, int milliseconds)
+        {            
+            
+            Process p = new Process();
+            string res = string.Empty;
+
+            p.StartInfo.FileName = "cmd.exe";          
+            p.StartInfo.Arguments = "/c " + command;    
+            p.StartInfo.UseShellExecute = false;        
+            p.StartInfo.RedirectStandardInput = true;   
+            p.StartInfo.RedirectStandardOutput = true;  
+            p.StartInfo.RedirectStandardError = true;   
+            p.StartInfo.CreateNoWindow = true;          
+            try
+            {
+                if (p.Start())       //开始进程
+                {
+                    if (milliseconds == 0)
+                        p.WaitForExit();     //这里无限等待进程结束
+                    else
+                        p.WaitForExit(milliseconds);  //这里等待进程结束，等待时间为指定的毫秒     
+                    res = p.StandardOutput.ReadToEnd();
+                }
+            }
+            catch
+            {
+            }
+            finally
+            {
+                if (p != null)
+                    p.Close();
+                //KillProcess(p);
+            }
+                        
+            return res;      
+        }
+
+
+
         public static Document OpenDoc(string path)
         {
             Document doc = null;

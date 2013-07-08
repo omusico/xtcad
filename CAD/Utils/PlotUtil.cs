@@ -9,6 +9,7 @@ using Autodesk.AutoCAD.ApplicationServices;
 using System.Windows.Forms;
 using Autodesk.AutoCAD.PlottingServices;
 using System.Collections.Specialized;
+using DNA;
 
 namespace CAD
 {
@@ -142,9 +143,9 @@ namespace CAD
         /// 搜索图框
         /// V1.0 by WeltionChen@2011.02.24
         /// </summary>
-        public static List<ObjectId> GetDrawingFrames(Database db)
+        public static List<FrameInfo> GetDrawingFrames(Database db)
         {
-            List<ObjectId> result = null;
+            List<FrameInfo> result = new List<FrameInfo>();
             using (Transaction tr = db.TransactionManager.StartTransaction())
             {
                 Point3d minPoint = db.Extmin;
@@ -172,8 +173,34 @@ namespace CAD
                         {
                             Autodesk.AutoCAD.DatabaseServices.Polyline framePline = tr.GetObject(frameId, OpenMode.ForRead) as Autodesk.AutoCAD.DatabaseServices.Polyline;
                             framePline.Highlight();
+                            FrameInfo frameInfo = GetFrameSizeScale(db, frameId);
+                            if(frameInfo != null)
+                            {
+                                result.Add(frameInfo);
+                            }
                         }
-                        result = resultObjectIds;
+                    }
+                    else
+                    {
+                        Console.WriteLine("选择多段线图框失败:" + selectedFrameResult.Status.GetTypeCode());
+                    }
+                    frameFilter = new SelectionFilter(new TypedValue[] { new TypedValue(0, "INSERT") });
+                    selectedFrameResult = ed.SelectAll(frameFilter);
+                    if (selectedFrameResult.Status == PromptStatus.OK)
+                    {
+                        List<ObjectId> resultObjectIds = new List<ObjectId>(selectedFrameResult.Value.GetObjectIds());
+                        foreach (ObjectId frameId in resultObjectIds)
+                        {
+                            FrameInfo frameInfo = GetFrameSizeScale(db, frameId);
+                            if (frameInfo != null)
+                            {
+                                result.Add(frameInfo);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("选择块图框失败:" + selectedFrameResult.Status.GetTypeCode());
                     }
                 }
             }
@@ -208,20 +235,38 @@ namespace CAD
             FrameInfo frameInfo = null;
             using (Transaction tr = db.TransactionManager.StartTransaction())
             {
-                Polyline frameLine = tr.GetObject(frameId, OpenMode.ForRead) as Polyline;
-                Point2d pt1 = frameLine.GetPoint2dAt(0);
-                Point2d pt2 = frameLine.GetPoint2dAt(2);
-                GetFrameSizeScale(pt1, pt2, out frameInfo);
-                Extents2d extents2d = new Extents2d(pt1, pt2);
-                frameInfo.extents2d = extents2d;
+                DBObject frameObject = tr.GetObject(frameId, OpenMode.ForRead);
+                if(frameObject is Polyline)
+                {
+                    Polyline frameLine = frameObject as Polyline;
+                    Point2d pt1 = frameLine.GetPoint2dAt(0);
+                    Point2d pt2 = frameLine.GetPoint2dAt(2);
+                    if(GetFrameSizeScale(pt1, pt2, out frameInfo))
+                    {
+                        Extents2d extents2d = new Extents2d(pt1, pt2);
+                        frameInfo.extents2d = extents2d;
+                    }
+                }
+                if (frameObject is BlockReference)
+                {
+                    BlockReference frameBlock = frameObject as BlockReference;
+                    Point3d pt11 = frameBlock.GeometricExtents.MinPoint;
+                    Point2d pt1 = new Point2d(pt11.X,pt11.Y);
+                    pt11 = frameBlock.GeometricExtents.MaxPoint;
+                    Point2d pt2 = new Point2d(pt11.X, pt11.Y);
+                    if (GetFrameSizeScale(pt1, pt2, out frameInfo))
+                    {
+                        Extents2d extents2d = new Extents2d(pt1, pt2);
+                        frameInfo.extents2d = extents2d;
+                    }
+                }
             }
             return frameInfo;
         }
 
         private static bool GetFrameSizeScale(Point2d pt1, Point2d pt2, out FrameInfo frameInfo)
         {
-            frameInfo = new FrameInfo();
-            List<int> pageWidths = new List<int> { 841, 594, 419, 293, 210 };
+            List<int> pageWidths = new List<int> { 841, 594, 419, 293, 297, 210 };
 
             double frameXSize = Math.Abs(pt1.X - pt2.X);
 
@@ -236,6 +281,7 @@ namespace CAD
 
                 if ((int)frameWidth % pageWidth == 0)
                 {
+                    frameInfo = new FrameInfo();
                     double scale = pageWidth / frameWidth;
                     frameInfo.scale = scale;
                     frameInfo.width = frameXSize * scale;
@@ -244,7 +290,7 @@ namespace CAD
                 }
 
             }
-
+            frameInfo = null;
             return false;
         }
 

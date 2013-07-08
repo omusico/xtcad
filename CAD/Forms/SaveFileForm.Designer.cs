@@ -39,6 +39,7 @@ namespace CAD
             this.radLabel2 = new Telerik.WinControls.UI.RadLabel();
             this.newVersionButton = new Telerik.WinControls.UI.RadRadioButton();
             this.overrideVersionButton = new Telerik.WinControls.UI.RadRadioButton();
+            this.printButton = new Telerik.WinControls.UI.RadButton();
             ((System.ComponentModel.ISupportInitialize)(this.radLabel1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.itemComboBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.OkButton)).BeginInit();
@@ -49,6 +50,7 @@ namespace CAD
             ((System.ComponentModel.ISupportInitialize)(this.radLabel2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.newVersionButton)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.overrideVersionButton)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.printButton)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this)).BeginInit();
             this.SuspendLayout();
             // 
@@ -77,7 +79,7 @@ namespace CAD
             // OkButton
             // 
             this.OkButton.AccessibleRole = System.Windows.Forms.AccessibleRole.PushButton;
-            this.OkButton.Location = new System.Drawing.Point(76, 204);
+            this.OkButton.Location = new System.Drawing.Point(76, 259);
             this.OkButton.Name = "OkButton";
             this.OkButton.Size = new System.Drawing.Size(75, 23);
             this.OkButton.TabIndex = 38;
@@ -87,7 +89,7 @@ namespace CAD
             // CancelButton
             // 
             this.CancelButton.AccessibleRole = System.Windows.Forms.AccessibleRole.PushButton;
-            this.CancelButton.Location = new System.Drawing.Point(163, 204);
+            this.CancelButton.Location = new System.Drawing.Point(163, 259);
             this.CancelButton.Name = "CancelButton";
             this.CancelButton.Size = new System.Drawing.Size(75, 23);
             this.CancelButton.TabIndex = 39;
@@ -114,12 +116,12 @@ namespace CAD
             this.dwgPic.Location = new System.Drawing.Point(72, 37);
             this.dwgPic.Name = "dwgPic";
             this.dwgPic.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("dwgPic.OcxState")));
-            this.dwgPic.Size = new System.Drawing.Size(203, 134);
+            this.dwgPic.Size = new System.Drawing.Size(203, 155);
             this.dwgPic.TabIndex = 43;
             // 
             // radLabel2
             // 
-            this.radLabel2.Location = new System.Drawing.Point(14, 169);
+            this.radLabel2.Location = new System.Drawing.Point(14, 231);
             this.radLabel2.Name = "radLabel2";
             this.radLabel2.Size = new System.Drawing.Size(52, 18);
             this.radLabel2.TabIndex = 44;
@@ -127,7 +129,7 @@ namespace CAD
             // 
             // newVersionButton
             // 
-            this.newVersionButton.Location = new System.Drawing.Point(76, 169);
+            this.newVersionButton.Location = new System.Drawing.Point(76, 231);
             this.newVersionButton.Name = "newVersionButton";
             this.newVersionButton.Size = new System.Drawing.Size(75, 18);
             this.newVersionButton.TabIndex = 45;
@@ -135,17 +137,28 @@ namespace CAD
             // 
             // overrideVersionButton
             // 
-            this.overrideVersionButton.Location = new System.Drawing.Point(163, 169);
+            this.overrideVersionButton.Location = new System.Drawing.Point(163, 231);
             this.overrideVersionButton.Name = "overrideVersionButton";
             this.overrideVersionButton.Size = new System.Drawing.Size(95, 18);
             this.overrideVersionButton.TabIndex = 46;
             this.overrideVersionButton.Text = "覆盖上一版本";
             // 
+            // printButton
+            // 
+            this.printButton.AccessibleRole = System.Windows.Forms.AccessibleRole.PushButton;
+            this.printButton.Location = new System.Drawing.Point(76, 198);
+            this.printButton.Name = "printButton";
+            this.printButton.Size = new System.Drawing.Size(75, 23);
+            this.printButton.TabIndex = 47;
+            this.printButton.Text = "打印pdf";
+            this.printButton.Click += new System.EventHandler(this.printButton_Click);
+            // 
             // SaveFileForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(289, 231);
+            this.ClientSize = new System.Drawing.Size(289, 290);
+            this.Controls.Add(this.printButton);
             this.Controls.Add(this.overrideVersionButton);
             this.Controls.Add(this.newVersionButton);
             this.Controls.Add(this.radLabel2);
@@ -173,6 +186,7 @@ namespace CAD
             ((System.ComponentModel.ISupportInitialize)(this.radLabel2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.newVersionButton)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.overrideVersionButton)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.printButton)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -191,6 +205,7 @@ namespace CAD
         private Telerik.WinControls.UI.RadLabel radLabel2;
         private Telerik.WinControls.UI.RadRadioButton newVersionButton;
         private Telerik.WinControls.UI.RadRadioButton overrideVersionButton;
+        private Telerik.WinControls.UI.RadButton printButton;
     }
 }
 

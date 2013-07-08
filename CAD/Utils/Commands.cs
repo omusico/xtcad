@@ -18,6 +18,8 @@ using DNA;
 using Autodesk.AutoCAD.Interop;
 using System.Configuration;
 using AcadApp = Autodesk.AutoCAD.ApplicationServices.Application;
+using System.IO;
+using Model.com.ccepc.utils;
 
 namespace CAD
 {
@@ -73,6 +75,41 @@ namespace CAD
             Tools.WriteMessageWithReturn("获取当前运行的程序集的完整路径（包含文件名）" + s1);
         }
 
+        [CommandMethod("hessian")]
+        public static void hessian()
+        {
+            CADService service = HessianHelper.getServiceInstance();
+            string result = service.getUser();
+            User user = JsonHelper.JsonDeserialize<User>(result);
+            Tools.WriteMessage(user.realName);
+        }
+
+        [CommandMethod("PlotFile")]
+        public static void PlotFile()
+        {
+            string fileName = Tools.Editor.GetString("文件路径").StringResult;
+            if (File.Exists(fileName))
+            {
+                DocumentCollection acDocMgr = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager;
+                Document doc = acDocMgr.Open(fileName, false);
+                Database db = doc.Database;
+                List<FrameInfo> frames = PlotUtil.GetDrawingFrames(db);
+                foreach (FrameInfo frameInfo in frames)
+                {
+                    PlotUtil.Plot(doc, frameInfo.extents2d, "pdfFactory Pro", 3, frameInfo.scale);
+                }
+            }
+        }
+
+        [CommandMethod("RunCmd")]
+        public static void RunCmd()
+        {
+            //string cmd = @"D:\360安全浏览器下载\pdfspme_win\pdfspme_cmd.exe  -mer -i D:\ftpHome\pdfcreator\1.pdf -i D:\ftpHome\pdfcreator\2.pdf -o D:\ftpHome\pdfcreator\4.pdf";
+            //Tools.WriteMessage(CommonTools.RunCmd(cmd,0));
+            string tempFile = Environment.GetEnvironmentVariable("TEMP");
+            Tools.WriteMessage(tempFile);
+        }
+
         [CommandMethod("BatchPlot")]
         public static void BatchPlot()
         {
@@ -99,7 +136,7 @@ namespace CAD
         [CommandMethod("UserDataInfo")]
         public static void UserDataInfo()
         {
-            FileInfo fileInfo = (FileInfo)Tools.Document.UserData["文件信息"];
+            com.ccepc.entities.FileInfo fileInfo = (com.ccepc.entities.FileInfo)Tools.Document.UserData["文件信息"];
             CheckStage checkStage = (CheckStage)Tools.Document.UserData["操作信息"];
             if(fileInfo != null)
             {
@@ -121,9 +158,9 @@ namespace CAD
             string[] args = new string[1];
             args[0] = fileId;
             object result = WebServiceHelper.InvokeWebService("UserWebservice", "getFileInfo", args);
-            FileInfo fileInfo = JsonHelper.JsonDeserialize<FileInfo>(result.ToString());
+            com.ccepc.entities.FileInfo fileInfo = JsonHelper.JsonDeserialize<com.ccepc.entities.FileInfo>(result.ToString());
             AppInitialization.fileInfoPanel.Text = "文件信息：" + fileInfo.fileName;
-            if(!Tools.Document.UserData.Contains("文件信息"))
+            if (!Tools.Document.UserData.Contains("文件信息"))
             {
                 Tools.Document.UserData.Add("文件信息", fileInfo);
             }
