@@ -17,5 +17,8 @@ namespace com.ccepc.entities
 		public TaskType taskType;
 		public SubProject subProject;
 		public HashSet<ProcessPlan> children;
+		public DesignerConfig sendDesignerConfig;
+		public string receiveDesignerConfigIds;
+		public List<DesignerConfig> receiveDesignerConfig;
 	}
 }

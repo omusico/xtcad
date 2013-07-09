@@ -82,6 +82,8 @@
     <Compile Include="com\ccepc\entities\PrintFeeChild.cs" />
     <Compile Include="com\ccepc\entities\ProcessPlan.cs" />
     <Compile Include="com\ccepc\entities\Project.cs" />
+    <Compile Include="com\ccepc\entities\ReportTemplate.cs" />
+    <Compile Include="com\ccepc\entities\ReportTemplateType.cs" />
     <Compile Include="com\ccepc\entities\Role.cs" />
     <Compile Include="com\ccepc\entities\RolePermission.cs" />
     <Compile Include="com\ccepc\entities\SubProject.cs" />

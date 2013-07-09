@@ -19,6 +19,8 @@ namespace com.ccepc.entities
 		public string ext;
 		public bool converted;
 		public bool uploaded;
+		public int naturePages;
+		public double a1Pages;
 		public byte[] fileContent;
 		public DateTime fileDate;
 		public byte[] fileIcon;

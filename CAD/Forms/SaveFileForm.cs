@@ -17,6 +17,7 @@ using Autodesk.AutoCAD.DatabaseServices;
 using Autodesk.AutoCAD.ApplicationServices;
 using Telerik.WinControls.Enumerations;
 using System.Collections;
+using Model.com.ccepc.utils;
 
 namespace CAD
 {
@@ -26,34 +27,29 @@ namespace CAD
         private string fName;
         private string pdfPath = @"D:\ftpHome\pdfcreator";
 
+        private CADService service = HessianHelper.getServiceInstance();
+
         public SaveFileForm()
         {
             InitializeComponent();
             OkButton.Enabled = false;
-            string[] args = new string[1];
-            args[0] = AppInitialization.loginUser.id.ToString();
-            try{
-                object result = WebServiceHelper.InvokeWebService("UserWebservice", "getDesignerConfigs", args);
-                List<DesignerConfig> designerConfigs = JsonHelper.JsonDeserialize<List<DesignerConfig>>(result.ToString());
-                foreach (var desigerConfig in designerConfigs)
-                {
-                    DisciplineConfig disciplineConfig = desigerConfig.disciplineConfig;
-                    SubProject subProject = disciplineConfig.subProject;
-                    Project project = subProject.project;
-                    string projectName = subProject.subProjectName + "  "
-                                        + disciplineConfig.discipline.disciplineName
-                                        + desigerConfig.configDesc;
-                    itemComboBox.ComboBoxElement.Items.Add(new RadComboBoxItem(projectName, desigerConfig));
-                }
-                fileName = Tools.Document.Name;
-                fName = fileName.Substring(fileName.LastIndexOf("\\") + 1);
-                Tools.RunCommand(true, "qsave");
-                dwgPic.BackColor = Color.White;
-                dwgPic.DwgFileName = fileName;
+            string result = service.getDesignerConfigsByUser(AppInitialization.loginUser.id.ToString());
+            List<DesignerConfig> designerConfigs = JsonHelper.JsonDeserialize<List<DesignerConfig>>(result.ToString());
+            foreach (var desigerConfig in designerConfigs)
+            {
+                DisciplineConfig disciplineConfig = desigerConfig.disciplineConfig;
+                SubProject subProject = disciplineConfig.subProject;
+                Project project = subProject.project;
+                string projectName = subProject.subProjectName + "  "
+                                    + disciplineConfig.discipline.disciplineName
+                                    + desigerConfig.configDesc;
+                itemComboBox.ComboBoxElement.Items.Add(new RadComboBoxItem(projectName, desigerConfig));
             }
-            catch(Exception e) {
-                RadMessageBox.Show(e.Message);
-            }
+            fileName = Tools.Document.Name;
+            fName = fileName.Substring(fileName.LastIndexOf("\\") + 1);
+            Tools.RunCommand(true, "qsave");
+            dwgPic.BackColor = Color.White;
+            dwgPic.DwgFileName = fileName;
         }
 
         private void clearPlotFiles(string path)
@@ -90,10 +86,7 @@ namespace CAD
         private void OkButton_Click(object sender, EventArgs e)
         {
             DesignerConfig designerConfig = itemComboBox.SelectedValue as DesignerConfig;
-            //FolderInfo folderInfo = designerConfig.folderInfos.Where(o => o.folderSubType == "designefile" && o.folderType == "designeConfig").FirstOrDefault();
-            string[] args = new string[1];
-            args[0] = designerConfig.id.ToString();
-            object result = WebServiceHelper.InvokeWebService("UserWebservice", "getDesigneFolder", args);
+            string result = service.getDesigneFolder(designerConfig.id.ToString());
             FolderInfo folderInfo = JsonHelper.JsonDeserialize<FolderInfo>(result.ToString());
             string tempFile = Environment.GetEnvironmentVariable("TEMP") + "\\" + fName;
             string uid = Guid.NewGuid().ToString("D");
@@ -107,25 +100,17 @@ namespace CAD
             CommonTools.RunCmd(cmd, 0);
             FtpUtil.UploadFile(outputFile, folderInfo.folderPath,
                 "127.0.0.1", "admin", "admin", uid + ".pdf");
-            args = new string[3];
-            args[0] = designerConfig.id.ToString();
-            args[1] = fileNewName;
-            args[2] = fName;
-            result = WebServiceHelper.InvokeWebService("UserWebservice", "uploadFile", args);
-            RadMessageBox.Show(result.ToString());
+            result = service.uploadFile(designerConfig.id.ToString(), fileNewName, fName, AppInitialization.loginUser.id.ToString());
             System.IO.FileInfo f = new System.IO.FileInfo(tempFile);
             f.Delete();
+            RadMessageBox.Show(result.ToString());
             this.Close();
         }
 
         private void itemComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             DesignerConfig designerConfig = itemComboBox.SelectedValue as DesignerConfig;
-            //com.ccepc.entities.FileInfo fileInfo = designerConfig.fileInfos.Where(o => o.fileName == fName).FirstOrDefault();
-            string[] args = new string[2];
-            args[0] = designerConfig.id.ToString();
-            args[1] = fName;
-            object result = WebServiceHelper.InvokeWebService("UserWebservice", "getFileInfoByDesignerConfigAndFileName", args);
+            string result = service.getFileInfoByDesignerConfigAndFileName(designerConfig.id.ToString(), fName);
             com.ccepc.entities.FileInfo fileInfo = JsonHelper.JsonDeserialize<com.ccepc.entities.FileInfo>(result.ToString());
             if (fileInfo == null)
             {

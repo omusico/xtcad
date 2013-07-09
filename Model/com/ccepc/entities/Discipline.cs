@@ -10,7 +10,8 @@ namespace com.ccepc.entities
 		public int version;
 		public string disciplineName;
 		public Department department;
-		public HashSet<User> children;
+		public List<User> children;
 		public List<User> managers;
+		public bool selected;
 	}
 }

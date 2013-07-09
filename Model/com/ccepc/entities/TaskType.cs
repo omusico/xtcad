@@ -10,6 +10,7 @@ namespace com.ccepc.entities
 		public int version;
 		public string typeName;
 		public Discipline sendDiscipline;
-		public Discipline receiveDiscipline;
+		public string receiveDisciplineIds;
+		public List<Discipline> receiveDisciplines;
 	}
 }

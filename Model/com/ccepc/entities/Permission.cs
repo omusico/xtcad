@@ -10,7 +10,9 @@ namespace com.ccepc.entities
 		public int version;
 		public string permissionDesc;
 		public string operate;
+		public string type;
 		public HashSet<Permission> children;
 		public Permission parent;
+		public bool selected;
 	}
 }

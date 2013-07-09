@@ -12,6 +12,7 @@ using Telerik.WinControls.UI;
 using com.ccepc.utils;
 using com.ccepc.entities;
 using DNA;
+using Model.com.ccepc.utils;
 
 
 namespace CAD
@@ -21,15 +22,14 @@ namespace CAD
         private string loginname;
         private string loginpwd;
         private bool isEmpty = false;
+        private CADService service = HessianHelper.getServiceInstance();
 
         public LoginForm()
         {
             InitializeComponent();
             this.UserName.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
             this.UserName.Items.Clear();
-            string[] args = new string[1];
-            args[0] = "测试程序";
-            object result = WebServiceHelper.InvokeWebService("HelloWebservice", "getName", args);
+            string result = service.getUsers();
             List<User> users = JsonHelper.JsonDeserialize<List<User>>(result.ToString());
             foreach (var user in users)
             {
@@ -44,10 +44,7 @@ namespace CAD
 
             if (isEmpty == true)
             {
-                string[] args = new string[2];
-                args[0] = this.UserName.Text;
-                args[1] = this.Password.Text;
-                object result = WebServiceHelper.InvokeWebService("UserWebservice", "login", args);
+                string result = service.login(this.UserName.Text, this.Password.Text);
                 if (result != null)
                 {
                     User u = JsonHelper.JsonDeserialize<User>(result.ToString());

@@ -36,6 +36,8 @@ namespace CAD
         [DllImport("acad.exe", EntryPoint = "?acedGetUserFavoritesDir@@YAHPA_W@Z", CharSet = CharSet.Auto)]
         public static extern bool acedGetUserFavoritesDir([MarshalAs(UnmanagedType.LPWStr)] StringBuilder sDir);
 
+        private static CADService service = HessianHelper.getServiceInstance();
+
         public static void AddMenu()
         {
             //COM方式获取AutoCAD应用程序对象
@@ -79,9 +81,9 @@ namespace CAD
         public static void hessian()
         {
             CADService service = HessianHelper.getServiceInstance();
-            string result = service.getUser();
-            User user = JsonHelper.JsonDeserialize<User>(result);
-            Tools.WriteMessage(user.realName);
+            string result = service.getUsers();
+            List<User> users = JsonHelper.JsonDeserialize<List<User>>(result);
+            Tools.WriteMessage(users.Count.ToString());
         }
 
         [CommandMethod("PlotFile")]
@@ -155,10 +157,8 @@ namespace CAD
             AcadApp.SetSystemVariable("cmdecho", 0);
             string fileId = Tools.Editor.GetString("文件id").StringResult;
             AcadApp.SetSystemVariable("cmdecho", 1);
-            string[] args = new string[1];
-            args[0] = fileId;
-            object result = WebServiceHelper.InvokeWebService("UserWebservice", "getFileInfo", args);
-            com.ccepc.entities.FileInfo fileInfo = JsonHelper.JsonDeserialize<com.ccepc.entities.FileInfo>(result.ToString());
+            string result = service.getFileInfo(fileId);
+            com.ccepc.entities.FileInfo fileInfo = JsonHelper.JsonDeserialize<com.ccepc.entities.FileInfo>(result);
             AppInitialization.fileInfoPanel.Text = "文件信息：" + fileInfo.fileName;
             if (!Tools.Document.UserData.Contains("文件信息"))
             {
@@ -195,19 +195,6 @@ namespace CAD
             //ShowWindow(appHwd, 3);
             //SetForegroundWindow(appHwd);
             //acadApp.Documents.Open(filePath, false, null);
-        }
-
-        [CommandMethod("test")]
-        public static void test()
-        {
-            string[] args = new string[1];
-            args[0] = "测试程序";
-            object result = WebServiceHelper.InvokeWebService("HelloWebservice", "getName", args);
-            List<User> fileTypes = JsonHelper.JsonDeserialize<List<User>>(result.ToString());
-            //FileType ft = parse<FileType>(result.ToString());
-            //ed.WriteMessage(fileType.fileTypeName);
-            Tools.WriteMessageWithReturn("共有" + fileTypes.Count.ToString() + "种文件类型");
-            Tools.RunCommand(true, "test1", "12", "111");
         }
 
         [CommandMethod("test1")]

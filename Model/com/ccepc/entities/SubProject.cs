@@ -15,12 +15,12 @@ namespace com.ccepc.entities
 		public DateTime actualFinishDate;
 		public DateTime pigeonholeDate;
 		public double sumAmount;
-		public int status;
+		public string status;
 		public double managerScale;
 		public double managerPrizeScale;
 		public double designScale;
 		public double budgetScale;
-		public int prizeStatus;
+		public string prizeStatus;
 		public HashSet<DisciplineConfig> disciplineConfigs;
 		public User creater;
 		public User manager;

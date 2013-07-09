@@ -8,6 +8,12 @@ namespace Model.com.ccepc.utils
 {
     public interface CADService
     {
-        string getUser();
+        string getUsers();
+        string login(string userName, string password);
+        string getDesigneFolder(string designerConfigId);
+        string uploadFile(string designerConfigId, string fileNewName,string fileName, string userId);
+        string getFileInfoByDesignerConfigAndFileName(string designerConfig, string fileName);
+        string getDesignerConfigsByUser(string userId);
+        string getFileInfo(string fileId);
     }
 }

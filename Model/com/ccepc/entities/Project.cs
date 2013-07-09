@@ -29,7 +29,7 @@ namespace com.ccepc.entities
 		public string address;
 		public string email;
 		public string projectDesc;
-		public int status;
+		public string status;
 		public User creater;
 		public User manager;
 	}
