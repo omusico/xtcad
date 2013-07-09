@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using hessiancsharp.client;
 
-namespace Model.com.ccepc.utils
+namespace com.ccepc.utils
 {
     public class HessianHelper
     {

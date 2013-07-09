@@ -17,7 +17,7 @@ using Autodesk.AutoCAD.DatabaseServices;
 using Autodesk.AutoCAD.ApplicationServices;
 using Telerik.WinControls.Enumerations;
 using System.Collections;
-using Model.com.ccepc.utils;
+using System.Diagnostics;
 
 namespace CAD
 {
@@ -27,14 +27,11 @@ namespace CAD
         private string fName;
         private string pdfPath = @"D:\ftpHome\pdfcreator";
 
-        private CADService service = HessianHelper.getServiceInstance();
-
         public SaveFileForm()
         {
             InitializeComponent();
             OkButton.Enabled = false;
-            string result = service.getDesignerConfigsByUser(AppInitialization.loginUser.id.ToString());
-            List<DesignerConfig> designerConfigs = JsonHelper.JsonDeserialize<List<DesignerConfig>>(result.ToString());
+            List<DesignerConfig> designerConfigs = CADServiceImpl.getDesignerConfigsByUser(AppInitialization.loginUser.id.ToString());
             foreach (var desigerConfig in designerConfigs)
             {
                 DisciplineConfig disciplineConfig = desigerConfig.disciplineConfig;
@@ -86,8 +83,7 @@ namespace CAD
         private void OkButton_Click(object sender, EventArgs e)
         {
             DesignerConfig designerConfig = itemComboBox.SelectedValue as DesignerConfig;
-            string result = service.getDesigneFolder(designerConfig.id.ToString());
-            FolderInfo folderInfo = JsonHelper.JsonDeserialize<FolderInfo>(result.ToString());
+            FolderInfo folderInfo = CADServiceImpl.getDesigneFolder(designerConfig.id.ToString());
             string tempFile = Environment.GetEnvironmentVariable("TEMP") + "\\" + fName;
             string uid = Guid.NewGuid().ToString("D");
             string fileNewName = uid + ".dwg";
@@ -100,7 +96,7 @@ namespace CAD
             CommonTools.RunCmd(cmd, 0);
             FtpUtil.UploadFile(outputFile, folderInfo.folderPath,
                 "127.0.0.1", "admin", "admin", uid + ".pdf");
-            result = service.uploadFile(designerConfig.id.ToString(), fileNewName, fName, AppInitialization.loginUser.id.ToString());
+            string result = CADServiceImpl.uploadFile(designerConfig.id.ToString(), fileNewName, fName, AppInitialization.loginUser.id.ToString());
             System.IO.FileInfo f = new System.IO.FileInfo(tempFile);
             f.Delete();
             RadMessageBox.Show(result.ToString());
@@ -110,8 +106,7 @@ namespace CAD
         private void itemComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             DesignerConfig designerConfig = itemComboBox.SelectedValue as DesignerConfig;
-            string result = service.getFileInfoByDesignerConfigAndFileName(designerConfig.id.ToString(), fName);
-            com.ccepc.entities.FileInfo fileInfo = JsonHelper.JsonDeserialize<com.ccepc.entities.FileInfo>(result.ToString());
+            com.ccepc.entities.FileInfo fileInfo = CADServiceImpl.getFileInfoByDesignerConfigAndFileName(designerConfig.id.ToString(), fName);
             if (fileInfo == null)
             {
                 overrideVersionButton.Enabled = false;
@@ -122,6 +117,13 @@ namespace CAD
                 overrideVersionButton.Enabled = true;
                 overrideVersionButton.ToggleState = ToggleState.On;
             }
+        }
+
+        private Process getPrinterProcess()
+        {
+            Process[] processes = System.Diagnostics.Process.GetProcesses();
+            Process process = processes.Where(o => o.ProcessName.ToLower().Contains("pdfcreator")).FirstOrDefault();
+            return process;
         }
 
         private void printButton_Click(object sender, EventArgs e)
@@ -140,6 +142,9 @@ namespace CAD
             }
             doc.CloseAndDiscard();
             OkButton.Enabled = true;
+            Process p = getPrinterProcess();
+            if(p != null)
+                p.WaitForExit();
             this.Show();
         }
     }

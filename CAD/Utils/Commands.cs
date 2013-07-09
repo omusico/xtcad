@@ -19,7 +19,6 @@ using Autodesk.AutoCAD.Interop;
 using System.Configuration;
 using AcadApp = Autodesk.AutoCAD.ApplicationServices.Application;
 using System.IO;
-using Model.com.ccepc.utils;
 
 namespace CAD
 {
@@ -80,10 +79,7 @@ namespace CAD
         [CommandMethod("hessian")]
         public static void hessian()
         {
-            CADService service = HessianHelper.getServiceInstance();
-            string result = service.getUsers();
-            List<User> users = JsonHelper.JsonDeserialize<List<User>>(result);
-            Tools.WriteMessage(users.Count.ToString());
+            string userName = Tools.Editor.GetString("用户名").StringResult;
         }
 
         [CommandMethod("PlotFile")]
@@ -157,8 +153,7 @@ namespace CAD
             AcadApp.SetSystemVariable("cmdecho", 0);
             string fileId = Tools.Editor.GetString("文件id").StringResult;
             AcadApp.SetSystemVariable("cmdecho", 1);
-            string result = service.getFileInfo(fileId);
-            com.ccepc.entities.FileInfo fileInfo = JsonHelper.JsonDeserialize<com.ccepc.entities.FileInfo>(result);
+            com.ccepc.entities.FileInfo fileInfo = CADServiceImpl.getFileInfo(fileId);
             AppInitialization.fileInfoPanel.Text = "文件信息：" + fileInfo.fileName;
             if (!Tools.Document.UserData.Contains("文件信息"))
             {

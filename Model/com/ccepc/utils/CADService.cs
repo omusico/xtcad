@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using com.ccepc.entities;
 
-namespace Model.com.ccepc.utils
+namespace com.ccepc.utils
 {
     public interface CADService
     {

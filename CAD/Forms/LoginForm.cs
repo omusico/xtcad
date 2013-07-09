@@ -12,7 +12,6 @@ using Telerik.WinControls.UI;
 using com.ccepc.utils;
 using com.ccepc.entities;
 using DNA;
-using Model.com.ccepc.utils;
 
 
 namespace CAD
@@ -22,15 +21,13 @@ namespace CAD
         private string loginname;
         private string loginpwd;
         private bool isEmpty = false;
-        private CADService service = HessianHelper.getServiceInstance();
 
         public LoginForm()
         {
             InitializeComponent();
             this.UserName.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
             this.UserName.Items.Clear();
-            string result = service.getUsers();
-            List<User> users = JsonHelper.JsonDeserialize<List<User>>(result.ToString());
+            List<User> users = CADServiceImpl.getUsers();
             foreach (var user in users)
             {
                 this.UserName.ComboBoxElement.Items.Add(new RadComboBoxItem(user.userName, user));
@@ -44,25 +41,14 @@ namespace CAD
 
             if (isEmpty == true)
             {
-                string result = service.login(this.UserName.Text, this.Password.Text);
-                if (result != null)
+                User u = CADServiceImpl.login(UserName.Text, Password.Text);
+                if (u != null)
                 {
-                    User u = JsonHelper.JsonDeserialize<User>(result.ToString());
-                    if (u != null)
-                    {
-                        AppInitialization.loginUser = u;
-                        AppInitialization.userInfoPanel.Text = "登陆用户:" + u.realName;
-                        SaveHistroy();
-                        Tools.WriteMessageWithReturn(u.realName + "登陆成功！");
-                        this.Close();
-                    }
-                    else
-                    {
-                        RadMessageBox.Show(this, "登陆失败：用户名或密码错误,请重新输入!", "登陆提示", MessageBoxButtons.OK, RadMessageIcon.Error);
-                        this.UserName.Text = "";
-                        this.Password.Text = "";
-                        this.UserName.Focus();
-                    }
+                    AppInitialization.loginUser = u;
+                    AppInitialization.userInfoPanel.Text = "登陆用户:" + u.realName;
+                    SaveHistroy();
+                    Tools.WriteMessageWithReturn(u.realName + "登陆成功！");
+                    this.Close();
                 }
                 else
                 {
