@@ -80,6 +80,8 @@ namespace CAD
         public static void hessian()
         {
             string userName = Tools.Editor.GetString("用户名").StringResult;
+            //User user = CADServiceImpl.findUser(userName);
+            //Tools.WriteMessage(user.realName);
         }
 
         [CommandMethod("PlotFile")]

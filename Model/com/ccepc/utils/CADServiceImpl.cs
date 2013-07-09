@@ -50,12 +50,12 @@ namespace com.ccepc.utils
             List<DesignerConfig> designerConfigs = JsonHelper.JsonDeserialize<List<DesignerConfig>>(result);
             return designerConfigs;
         }
+
         public static FileInfo getFileInfo(string fileId)
         {
             string result = service.getFileInfo(fileId);
             FileInfo fileInfo = JsonHelper.JsonDeserialize<FileInfo>(result);
             return fileInfo;
         }
-        
     }
 }
