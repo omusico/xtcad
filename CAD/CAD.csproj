@@ -99,6 +99,12 @@
     <Compile Include="Forms\CheckFileToolForm.Designer.cs">
       <DependentUpon>CheckFileToolForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\DesignePalette.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\DesignePalette.designer.cs">
+      <DependentUpon>DesignePalette.cs</DependentUpon>
+    </Compile>
     <Compile Include="Utils\BlockContextMenu.cs" />
     <Compile Include="Forms\CADOptionControl.cs">
       <SubType>UserControl</SubType>
@@ -201,6 +207,10 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\CheckFileToolForm.resx">
       <DependentUpon>CheckFileToolForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\DesignePalette.resx">
+      <DependentUpon>DesignePalette.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\LoginForm.resx">

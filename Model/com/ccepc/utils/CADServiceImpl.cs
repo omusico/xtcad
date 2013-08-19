@@ -57,5 +57,12 @@ namespace com.ccepc.utils
             FileInfo fileInfo = JsonHelper.JsonDeserialize<FileInfo>(result);
             return fileInfo;
         }
+
+        public static List<Node> getSubProjectNodes(String userId)
+        {
+            string result = service.getSubProjectNodes(userId);
+            List<Node> nodes = JsonHelper.JsonDeserialize<List<Node>>(result);
+            return nodes;
+        }
     }
 }

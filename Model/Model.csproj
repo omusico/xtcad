@@ -91,6 +91,7 @@
     <Compile Include="com\ccepc\entities\User.cs" />
     <Compile Include="com\ccepc\entities\UserRole.cs" />
     <Compile Include="com\ccepc\entities\Welcome.cs" />
+    <Compile Include="com\ccepc\entities\Node.cs" />
     <Compile Include="com\ccepc\utils\CADService.cs" />
     <Compile Include="com\ccepc\utils\CADServiceImpl.cs" />
     <Compile Include="com\ccepc\utils\HessianHelper.cs" />

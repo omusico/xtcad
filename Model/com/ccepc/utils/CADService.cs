@@ -15,5 +15,6 @@ namespace com.ccepc.utils
         string getFileInfoByDesignerConfigAndFileName(string designerConfig, string fileName);
         string getDesignerConfigsByUser(string userId);
         string getFileInfo(string fileId);
+        string getSubProjectNodes(string userId);
     }
 }
