@@ -1,0 +1,1 @@
+CAD设计客户端与JAVA服务端用webservice通讯，采用json作为数据交换媒介.
